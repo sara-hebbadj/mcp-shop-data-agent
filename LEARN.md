@@ -81,8 +81,15 @@ limits. Close with what I changed after reviewing the generated code.
    company's logging; and an approved-query list or row-level security for sensitive tables.
 
 10. **Show me a question the agent got wrong, and why.**
-    *(Answer after the live run, from `evals/results/.../answers.csv`.)* Typical failure types to look for:
-    forgetting to exclude cancelled orders, mixing up `returned` status with the returns table, or ranking ties.
+    "Which month had the biggest increase in revenue compared with the previous month?" (en28, live run
+    2026-10-08, `evals/results/2026-10-08_cheap/answers.csv`). gpt-6-luna built a month calendar that started
+    one month *before* the first order and filled the empty month with 0, so the first real month looked like
+    a jump "from nothing": it answered April 2025, +AED 43,671. The gold answer is November 2025,
+    +AED 20,345.20 (`LAG()` over months that have orders). The SQL was valid and safe, so neither the guard
+    nor the database could catch it; only comparing results with the gold answer did. The same model got the
+    Arabic version (ar28) right. The other 4 wrong answers (both models) are ambiguous questions: whether
+    cancelled orders count, and whether "shipped" means `shipped_date IS NOT NULL`. I did not change any
+    question or prompt after seeing the answers; the next step is clearer wording, then a re-run.
 
 ## 3 "change it live" exercises
 

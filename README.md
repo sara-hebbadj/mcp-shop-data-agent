@@ -6,7 +6,9 @@ The server lets any MCP client (Claude Desktop, MCP Inspector, or the agent in t
 
 ## Demo
 
-Live hosted demo: coming soon (Hugging Face Space).
+**Live demo:** [huggingface.co/spaces/sarahebbadj/mcp-shop-data-agent](https://huggingface.co/spaces/sarahebbadj/mcp-shop-data-agent) (works without an API key, in demo mode).
+
+To enable live AI on your own copy: add `OPENROUTER_API_KEY` as a Space secret (and `MODEL_CHEAP` as a variable).
 
 Screenshots from a local run on 8 October 2026 with live AI (`openai/gpt-6-luna` through OpenRouter) and "Show SQL and result table" switched on. The data is synthetic.
 

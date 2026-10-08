@@ -97,5 +97,5 @@ claude mcp add --transport stdio lumi-shop-data -- /absolute/path/to/repo/.venv/
 | Client | Status on 2026-10-08 |
 |---|---|
 | MCP Inspector (CLI mode) | Run by the coding agent: tools/list, an allowed call, a blocked call and resources/list all worked. |
-| Data agent over stdio | Pipeline proven with a fake model (`--dry-run`); a live run needs an OpenRouter key. |
+| Data agent over stdio | Pipeline first proven with a fake model (`--dry-run`), then run live on 2026-10-08 with an OpenRouter key: 50 questions + 15 unsafe prompts per model (`openai/gpt-6-luna`, `anthropic/claude-sonnet-5.5`), results in `evals/results/` and the README. |
 | Claude Desktop | Pending: Sara to set up on her machine and record screenshots / video. |
