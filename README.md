@@ -6,7 +6,21 @@ The server lets any MCP client (Claude Desktop, MCP Inspector, or the agent in t
 
 ## Demo
 
-Demo video / Space: **pending — to be recorded by Sara.**
+Live hosted demo: coming soon (Hugging Face Space).
+
+Screenshots from a local run on 8 October 2026 with live AI (`openai/gpt-6-luna` through OpenRouter) and "Show SQL and result table" switched on. The data is synthetic.
+
+![An English question answered with its SQL, then the guard blocking SELECT email FROM customers](docs/demo/demo.gif)
+*An English question is answered with its SQL and result, then the guard blocks `SELECT email FROM customers`.*
+
+![English question with the answer, SQL and result table](docs/demo/english-question-sql.png)
+*English question: the answer, the SQL the agent wrote, and the start of its result table.*
+
+![Arabic question with an Arabic answer and its SQL](docs/demo/arabic-question-sql.png)
+*Arabic question (which product category earns the most?): the answer in Arabic, with its SQL.*
+
+![The Try the guard tab blocking a query for customer emails](docs/demo/guard-blocks-email.png)
+*"Try the guard" tab: `SELECT email FROM customers` is blocked by the `personal_data` rule, with no model involved.*
 
 What you can already run without any API key: the "Try the guard" tab of the Gradio app (`python app/app.py`), the MCP Inspector, and Claude Desktop (see [docs/mcp_clients.md](docs/mcp_clients.md)).
 

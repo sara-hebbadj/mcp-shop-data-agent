@@ -7,22 +7,39 @@ Tab 1 "Ask the data agent": chat in English or Arabic, with a "Show SQL" toggle.
          Needs OPENROUTER_API_KEY and MODEL_CHEAP (see .env.example).
 Tab 2 "Try the guard": paste any SQL and see whether the server allows it.
          Needs no key, so the safety layer can be demonstrated anywhere.
+
+On a Hugging Face Space: add OPENROUTER_API_KEY as a secret and MODEL_CHEAP as a
+variable in the Space settings. Without them the app runs in demo mode (guard tab only).
 """
 
-import gradio as gr
-import pandas as pd
+import os
+import sys
+from pathlib import Path
 
-from shop_data_mcp import config
-from shop_data_mcp.agent import ask, build_agent, format_table
-from shop_data_mcp.db import QueryFailed
-from shop_data_mcp.generate_data import generate
-from shop_data_mcp.llm import OpenRouterLLM
-from shop_data_mcp.mcp_client import connect_in_process
-from shop_data_mcp.tools import QueryBlocked, ShopData
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))  # works without installing (e.g. a Space)
+
+import gradio as gr  # noqa: E402
+import pandas as pd  # noqa: E402
+
+from shop_data_mcp import config  # noqa: E402
+from shop_data_mcp.agent import ask, build_agent, format_table  # noqa: E402
+from shop_data_mcp.db import QueryFailed  # noqa: E402
+from shop_data_mcp.generate_data import generate  # noqa: E402
+from shop_data_mcp.llm import OpenRouterLLM, load_settings  # noqa: E402
+from shop_data_mcp.mcp_client import connect_in_process  # noqa: E402
+from shop_data_mcp.tools import QueryBlocked, ShopData  # noqa: E402
 
 if not config.DB_PATH.exists():
-    generate(config.DB_PATH)  # a fresh clone or Space builds the database on first start
+    generate(config.DB_PATH)  # a fresh clone or Space builds the database on first start (seed 42)
 SHOP = ShopData()
+
+load_settings()
+LIVE = bool(os.environ.get("OPENROUTER_API_KEY") and os.environ.get("MODEL_CHEAP"))
+DEMO_MODE_NOTE = (
+    "**Demo mode — live AI is off; add OPENROUTER_API_KEY in Space settings to enable** (plus a "
+    "`MODEL_CHEAP` variable). The **Try the guard** tab works now: it runs your SQL through the "
+    "same safety layer the agent uses."
+)
 
 EXAMPLE_QUESTIONS = [
     "Which month had the highest revenue?",
@@ -42,6 +59,8 @@ EXAMPLE_SQL = [
 
 
 async def chat(message: str, history: list, show_sql: bool) -> str:
+    if not LIVE:
+        return DEMO_MODE_NOTE
     try:
         llm = OpenRouterLLM(role="cheap")
     except RuntimeError as error:
@@ -71,10 +90,17 @@ with gr.Blocks(title="Lumi Skin data agent") as demo:
     gr.Markdown(
         "# Lumi Skin data agent\nAsk business questions in English or Arabic. The agent writes SQL and runs it "
         "through a read-only MCP server. All data is synthetic (a fictional skincare shop)."
+        + ("" if LIVE else "\n\n" + DEMO_MODE_NOTE)
     )
     with gr.Tab("Ask the data agent"):
         show_sql = gr.Checkbox(value=True, label="Show SQL and result table")
-        gr.ChatInterface(fn=chat, additional_inputs=[show_sql], examples=[[q, True] for q in EXAMPLE_QUESTIONS])
+        # cache_examples=False: never call the model at start-up just to pre-fill example answers (costs money).
+        gr.ChatInterface(
+            fn=chat,
+            additional_inputs=[show_sql],
+            examples=[[q, True] for q in EXAMPLE_QUESTIONS],
+            cache_examples=False,
+        )
     with gr.Tab("Try the guard"):
         sql_box = gr.Textbox(label="SQL (SQLite)", lines=4, value=EXAMPLE_SQL[0])
         run_button = gr.Button("Run through the guard")
