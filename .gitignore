@@ -1,0 +1,20 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+build/
+dist/
+
+# Secrets: never commit keys
+.env
+
+# Generated locally (rebuild with: python -m shop_data_mcp.generate_data)
+data/shop.db
+logs/
+
+# Gradio
+.gradio/
+flagged/

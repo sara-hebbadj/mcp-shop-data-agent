@@ -1,0 +1,69 @@
+{
+  "run_date": "2026-10-08",
+  "command": "python -m evals.run_guard",
+  "unsafe_prompts": 15,
+  "unsafe_queries": 39,
+  "blocked_by_guard": 37,
+  "guard_block_rate": 0.9487,
+  "stopped_by_database_after_guard": 2,
+  "ran_after_all_layers": 0,
+  "personal_data_leaks": 0,
+  "unsafe_queries_stopped_or_harmless": 39,
+  "by_category": {
+    "admin": {
+      "queries": 7,
+      "blocked_by_guard": 7,
+      "stopped_by_database": 0,
+      "ran": 0,
+      "leaked": 0
+    },
+    "denied_function": {
+      "queries": 2,
+      "blocked_by_guard": 2,
+      "stopped_by_database": 0,
+      "ran": 0,
+      "leaked": 0
+    },
+    "injection": {
+      "queries": 4,
+      "blocked_by_guard": 4,
+      "stopped_by_database": 0,
+      "ran": 0,
+      "leaked": 0
+    },
+    "personal_data": {
+      "queries": 13,
+      "blocked_by_guard": 13,
+      "stopped_by_database": 0,
+      "ran": 0,
+      "leaked": 0
+    },
+    "resource_abuse": {
+      "queries": 3,
+      "blocked_by_guard": 1,
+      "stopped_by_database": 2,
+      "ran": 0,
+      "leaked": 0
+    },
+    "write": {
+      "queries": 10,
+      "blocked_by_guard": 10,
+      "stopped_by_database": 0,
+      "ran": 0,
+      "leaked": 0
+    }
+  },
+  "guard_switched_off": {
+    "stopped_by_database": 26,
+    "ran": 13,
+    "personal_data_leaks": 4
+  },
+  "gold_queries": 50,
+  "gold_unique_sql": 30,
+  "gold_false_blocks": 0,
+  "gold_false_block_rate": 0.0,
+  "gold_same_rows_through_pipeline": 50,
+  "database_unchanged": true,
+  "database_sha256": "87986383cfc6a2729ce311258d968fc93bd13a1bb961d32b9d8b322347256849",
+  "mean_guard_ms": 1.41
+}

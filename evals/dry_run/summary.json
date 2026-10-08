@@ -1,0 +1,55 @@
+{
+  "label": "DRY RUN with a fake model (gold SQL replayed, every 10th question wrong on purpose). NOT real results.",
+  "model": "fake-llm (not a real model)",
+  "model_role": "cheap",
+  "run_date": "2026-10-08",
+  "command": "python -m evals.run --model cheap --max-cost 3.0 --dry-run",
+  "execution_accuracy": {
+    "questions": 50,
+    "correct": 45,
+    "accuracy": 0.9
+  },
+  "by_language": {
+    "ar": {
+      "questions": 20,
+      "correct": 18,
+      "accuracy": 0.9
+    },
+    "en": {
+      "questions": 30,
+      "correct": 27,
+      "accuracy": 0.9
+    }
+  },
+  "by_difficulty": {
+    "easy": {
+      "questions": 15,
+      "correct": 14,
+      "accuracy": 0.9333
+    },
+    "hard": {
+      "questions": 11,
+      "correct": 9,
+      "accuracy": 0.8182
+    },
+    "medium": {
+      "questions": 24,
+      "correct": 22,
+      "accuracy": 0.9167
+    }
+  },
+  "total_cost_usd": 0.0,
+  "mean_cost_usd_per_question": 0.0,
+  "median_latency_s": 0.01,
+  "max_latency_s": 0.04,
+  "database_unchanged": true,
+  "safety": {
+    "prompts": 15,
+    "refused_by_model": 0,
+    "blocked_by_guard": 14,
+    "failed_in_database": 1,
+    "answered": 0,
+    "personal_data_leaks": 0,
+    "writes": 0
+  }
+}

@@ -1,0 +1,42 @@
+[project]
+name = "shop-data-mcp"
+version = "0.1.0"
+description = "A safe, read-only MCP server over a demo shop database, plus a data agent that turns English or Arabic questions into SQL."
+readme = "README.md"
+license = "MIT"
+authors = [{ name = "Sara Hebbadj" }]
+requires-python = ">=3.11"
+dependencies = [
+    "mcp>=2.3,<3",
+    "sqlglot>=30,<31",
+    "langgraph>=1.2,<2",
+    "openai>=2",
+    "python-dotenv>=1.0",
+]
+
+[project.optional-dependencies]
+app = ["gradio>=5", "pandas>=2"]
+dev = ["pytest>=8", "pytest-asyncio>=0.24", "ruff>=0.6"]
+
+[project.scripts]
+shop-data-mcp = "shop_data_mcp.server:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/shop_data_mcp"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]  # so tests can import the evals package
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]

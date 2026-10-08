@@ -1,0 +1,40 @@
+# MCP Inspector CLI check, run on 2026-10-08 by the coding agent (Claude)
+# @modelcontextprotocol/inspector 2.10.1, Node 22.22.0, Python 3.13, mcp 2.3.0. Database: data/shop.db (seed 42).
+# Server started with the console script .venv/bin/shop-data-mcp (stdio). Output pasted unedited.
+
+$ npx @modelcontextprotocol/inspector --cli .venv/bin/shop-data-mcp --method tools/list   (tool names only)
+['list_tables', 'describe_table', 'run_select', 'monthly_revenue', 'top_products']
+
+$ ... --method tools/call --tool-name run_select --tool-arg "sql=SELECT status, COUNT(*) AS n FROM orders GROUP BY status"
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"columns\": [\n    \"status\",\n    \"n\"\n  ],\n  \"rows\": [\n    [\n      \"cancelled\",\n      197\n    ],\n    [\n      \"delivered\",\n      4672\n    ],\n    [\n      \"processing\",\n      5\n    ],\n    [\n      \"returned\",\n      95\n    ],\n    [\n      \"shipped\",\n      31\n    ]\n  ],\n  \"row_count\": 5,\n  \"truncated\": false,\n  \"elapsed_ms\": 2.3\n}"
+    }
+  ],
+  "isError": false
+}
+
+$ ... --method tools/call --tool-name run_select --tool-arg "sql=DELETE FROM orders"
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "Error executing tool run_select: BLOCKED (not_select): Only SELECT queries are allowed (WITH ... SELECT is fine)."
+    }
+  ],
+  "isError": true
+}
+
+$ ... --method resources/list
+{
+  "resources": [
+    {
+      "name": "schema_summary",
+      "uri": "schema://summary",
+      "description": "All tables, columns and business definitions (revenue, return rate, delay...).",
+      "mimeType": "text/markdown"
+    }
+  ]
+}

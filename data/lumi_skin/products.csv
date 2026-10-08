@@ -1,0 +1,41 @@
+id,name,category,skin_type,key_ingredients,price_aed,stock
+P001,Gentle Foam Cleanser,cleanser,all,glycerin; green tea,59,31
+P002,Rice Water Gel Cleanser,cleanser,combination,rice extract; panthenol,65,9
+P003,Oat Milk Cream Cleanser,cleanser,dry,colloidal oat; shea butter,69,73
+P004,Green Tea Clarifying Cleanser,cleanser,oily,green tea; zinc PCA,62,65
+P005,Micellar Cleansing Water,cleanser,sensitive,micelles; cucumber extract,49,60
+P006,Salicylic Acne Cleanser,cleanser,oily,salicylic acid 2%; tea tree,72,38
+P007,Ceramide Hydrating Cleanser,cleanser,dry,ceramides; hyaluronic acid,75,29
+P008,Camellia Cleansing Balm,cleanser,all,camellia oil; vitamin E,89,142
+P009,Niacinamide 10% + Zinc Serum,serum,oily,niacinamide 10%; zinc 1%,79,25
+P010,Vitamin C Brightening Serum,serum,all,vitamin C 15%; ferulic acid,149,111
+P011,Hyaluronic Hydra Serum,serum,dry,hyaluronic acid; panthenol,99,11
+P012,Retinol 0.3% Night Serum,serum,combination,retinol 0.3%; squalane,139,10
+P013,Snail Mucin Repair Essence,serum,all,snail mucin 96%; allantoin,109,26
+P014,Centella Calming Ampoule,serum,sensitive,centella asiatica; madecassoside,119,58
+P015,Peptide Firming Serum,serum,dry,peptides; niacinamide,189,62
+P016,Azelaic Acid Clarity Serum,serum,sensitive,azelaic acid 10%; allantoin,129,132
+P017,Ceramide Barrier Cream,moisturiser,dry,ceramides; cholesterol; fatty acids,119,9
+P018,Oil-Free Water Gel,moisturiser,oily,hyaluronic acid; aloe vera,89,146
+P019,Squalane Night Cream,moisturiser,dry,squalane; peptides,149,53
+P020,Cica Recovery Balm,moisturiser,sensitive,centella asiatica; panthenol,99,142
+P021,Rose Hydration Cream,moisturiser,all,rose water; glycerin,95,110
+P022,Panthenol Soothing Cream,moisturiser,sensitive,panthenol 5%; madecassoside,85,59
+P023,Mattifying Day Moisturiser,moisturiser,oily,niacinamide; silica,92,117
+P024,Rich Shea Moisturiser,moisturiser,dry,shea butter; ceramides,105,74
+P025,Daily Fluid SPF 50+,sunscreen,all,UV filters; niacinamide,89,0
+P026,Mineral Sunscreen SPF 50,sunscreen,sensitive,zinc oxide; titanium dioxide,99,43
+P027,Tinted Sun Cream SPF 30,sunscreen,combination,iron oxides; vitamin E,95,111
+P028,Sun Stick SPF 50+,sunscreen,all,UV filters; jojoba oil,79,90
+P029,Matte Sun Gel SPF 50,sunscreen,oily,UV filters; silica,85,74
+P030,Kids Gentle Sunscreen SPF 50,sunscreen,sensitive,zinc oxide; aloe vera,75,42
+P031,Hydrating Sun Serum SPF 40,sunscreen,dry,UV filters; hyaluronic acid,109,58
+P032,Body Sun Lotion SPF 30,sunscreen,all,UV filters; shea butter,69,89
+P033,Kaolin Clay Purifying Mask,mask,oily,kaolin clay; niacinamide,79,29
+P034,Overnight Sleeping Mask,mask,dry,hyaluronic acid; squalane,95,26
+P035,Honey Glow Mask,mask,all,honey; propolis,89,100
+P036,Charcoal Pore Mask,mask,oily,charcoal; salicylic acid,72,27
+P037,Hydrogel Eye Patches (30 pairs),mask,all,caffeine; peptides,65,94
+P038,Aloe Sheet Mask (5 pack),mask,sensitive,aloe vera; allantoin,45,91
+P039,AHA Peel Mask,mask,combination,glycolic acid; lactic acid,99,70
+P040,Cica Soothing Sheet Mask (5 pack),mask,sensitive,centella asiatica; panthenol,55,14

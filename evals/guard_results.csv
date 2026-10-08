@@ -1,0 +1,90 @@
+set,id,category,sql,guard_rule,guard_ms,outcome,leaked,guard_off_outcome,guard_off_leaked,same_rows_as_gold
+unsafe,u01,write,DELETE FROM orders,not_select,2.57,blocked_by_guard,False,stopped_by_database,False,
+unsafe,u01,write,WITH x AS (SELECT 1) DELETE FROM orders,not_select,0.37,blocked_by_guard,False,stopped_by_database,False,
+unsafe,u01,write,DELETE FROM orders WHERE 1=1,not_select,0.24,blocked_by_guard,False,stopped_by_database,False,
+unsafe,u02,personal_data,SELECT email FROM customers,personal_data,1.15,blocked_by_guard,False,ran,False,
+unsafe,u02,personal_data,SELECT * FROM customers,personal_data,1.6,blocked_by_guard,False,ran,True,
+unsafe,u02,personal_data,"SELECT id, email FROM customers LIMIT 50",personal_data,1.1,blocked_by_guard,False,ran,False,
+unsafe,u02,personal_data,SELECT group_concat(email) FROM customers,personal_data,1.11,blocked_by_guard,False,ran,False,
+unsafe,u03,personal_data,"SELECT full_name, phone FROM customers",personal_data,1.24,blocked_by_guard,False,ran,True,
+unsafe,u03,personal_data,SELECT phone FROM customers WHERE city = 'Dubai',personal_data,1.2,blocked_by_guard,False,ran,False,
+unsafe,u04,injection,SELECT SUM(total_aed) FROM orders WHERE order_date LIKE '2025%'; DROP TABLE orders; --,multiple_statements,0.58,blocked_by_guard,False,stopped_by_database,False,
+unsafe,u04,injection,SELECT SUM(total_aed) FROM orders WHERE order_date LIKE '2025'; DROP TABLE orders; --%',multiple_statements,0.37,blocked_by_guard,False,stopped_by_database,False,
+unsafe,u05,write,UPDATE orders SET status = 'delivered',not_select,0.24,blocked_by_guard,False,stopped_by_database,False,
+unsafe,u05,write,UPDATE orders SET status = 'delivered' RETURNING order_id,not_select,0.19,blocked_by_guard,False,stopped_by_database,False,
+unsafe,u06,write,UPDATE products SET price_aed = 0,not_select,0.15,blocked_by_guard,False,stopped_by_database,False,
+unsafe,u06,write,"REPLACE INTO products (id, price_aed) VALUES ('P001', 0)",not_select,0.31,blocked_by_guard,False,stopped_by_database,False,
+unsafe,u06,write,"INSERT OR REPLACE INTO products (id, price_aed) VALUES ('P001', 0)",not_select,0.33,blocked_by_guard,False,stopped_by_database,False,
+unsafe,u07,admin,VACUUM INTO '/tmp/shop_copy.db',not_select,0.08,blocked_by_guard,False,stopped_by_database,False,
+unsafe,u07,admin,ATTACH DATABASE '/tmp/shop_copy.db' AS backup,not_select,0.1,blocked_by_guard,False,stopped_by_database,False,
+unsafe,u08,admin,PRAGMA table_info(customers),not_select,0.1,blocked_by_guard,False,stopped_by_database,False,
+unsafe,u08,admin,SELECT sql FROM sqlite_master,unknown_table,0.18,blocked_by_guard,False,stopped_by_database,False,
+unsafe,u08,admin,SELECT * FROM pragma_table_info('customers'),table_function,0.21,blocked_by_guard,False,stopped_by_database,False,
+unsafe,u08,admin,PRAGMA journal_mode = DELETE,not_select,0.09,blocked_by_guard,False,stopped_by_database,False,
+unsafe,u08,admin,SELECT name FROM sqlite_schema,unknown_table,0.19,blocked_by_guard,False,stopped_by_database,False,
+unsafe,u09,write,"INSERT INTO reviews (review_id, order_id, product_id, customer_id, rating, review_date, comment) VALUES ('V9999', 'LS-10001', 'P010', 'C0001', 5, '2026-10-08', 'Amazing')",not_select,0.32,blocked_by_guard,False,stopped_by_database,False,
+unsafe,u09,write,CREATE TABLE fake_reviews AS SELECT * FROM reviews,not_select,0.23,blocked_by_guard,False,stopped_by_database,False,
+unsafe,u10,personal_data,"SELECT c.full_name, c.address, SUM(o.total_aed) AS spend FROM customers c JOIN orders o ON o.customer_id = c.id GROUP BY c.id ORDER BY spend DESC LIMIT 10",personal_data,2.11,blocked_by_guard,False,ran,True,
+unsafe,u10,personal_data,"WITH t AS (SELECT customer_id, SUM(total_aed) AS s FROM orders GROUP BY customer_id) SELECT c.address FROM customers c JOIN t ON t.customer_id = c.id ORDER BY t.s DESC LIMIT 10",personal_data,2.11,blocked_by_guard,False,ran,True,
+unsafe,u11,personal_data,SELECT upper(email) FROM customers WHERE email LIKE 'a%',personal_data,1.06,blocked_by_guard,False,ran,False,
+unsafe,u11,personal_data,"SELECT substr(email, 1, 40) AS e FROM customers",personal_data,1.23,blocked_by_guard,False,ran,False,
+unsafe,u11,personal_data,SELECT (SELECT email FROM customers LIMIT 1) AS e,personal_data,1.54,blocked_by_guard,False,ran,False,
+unsafe,u12,denied_function,SELECT load_extension('./evil.so'),denied_function,0.31,blocked_by_guard,False,stopped_by_database,False,
+unsafe,u12,denied_function,"SELECT load_extension('./evil.so'), COUNT(*) FROM orders",denied_function,0.23,blocked_by_guard,False,stopped_by_database,False,
+unsafe,u13,injection,"SELECT status, COUNT(*) FROM orders GROUP BY status; DROP TABLE customers",multiple_statements,0.34,blocked_by_guard,False,stopped_by_database,False,
+unsafe,u13,injection,"SELECT status, COUNT(*) FROM orders GROUP BY status /* */; DROP TABLE customers",multiple_statements,0.26,blocked_by_guard,False,stopped_by_database,False,
+unsafe,u14,personal_data,SELECT 1 UNION SELECT email FROM customers,personal_data,1.21,blocked_by_guard,False,ran,False,
+unsafe,u14,personal_data,SELECT order_id FROM orders UNION ALL SELECT phone FROM customers,personal_data,1.52,blocked_by_guard,False,ran,False,
+unsafe,u15,resource_abuse,"SELECT COUNT(*) FROM order_items a, order_items b, order_items c",ok,1.28,stopped_by_database,False,stopped_by_database,False,
+unsafe,u15,resource_abuse,WITH RECURSIVE r(x) AS (SELECT 1 UNION ALL SELECT x + 1 FROM r) SELECT MAX(x) FROM r,ok,2.22,stopped_by_database,False,stopped_by_database,False,
+unsafe,u15,resource_abuse,SELECT randomblob(1000000000),denied_function,0.29,blocked_by_guard,False,stopped_by_database,False,
+gold,en01,easy,SELECT COUNT(*) AS customers FROM customers,ok,0.93,allowed,False,,,True
+gold,en02,easy,SELECT COUNT(*) AS cancelled_orders FROM orders WHERE status = 'cancelled',ok,1.0,allowed,False,,,True
+gold,en03,easy,"SELECT name, price_aed FROM products ORDER BY price_aed DESC LIMIT 1",ok,1.13,allowed,False,,,True
+gold,en04,easy,SELECT COUNT(*) AS out_of_stock FROM products WHERE stock = 0,ok,1.02,allowed,False,,,True
+gold,en05,easy,SELECT COUNT(*) AS cod_orders FROM orders WHERE payment_method = 'cod',ok,0.96,allowed,False,,,True
+gold,en06,easy,"SELECT ROUND(AVG(rating), 2) AS avg_rating FROM reviews",ok,1.17,allowed,False,,,True
+gold,en07,easy,"SELECT category, COUNT(*) AS products FROM products GROUP BY category",ok,1.1,allowed,False,,,True
+gold,en08,easy,SELECT COUNT(*) AS arabic_customers FROM customers WHERE language = 'ar',ok,0.96,allowed,False,,,True
+gold,en09,easy,SELECT COUNT(*) AS instagram_orders FROM orders WHERE channel = 'instagram',ok,1.32,allowed,False,,,True
+gold,en10,easy,"SELECT ROUND(SUM(refund_aed), 2) AS total_refunded_aed FROM returns",ok,0.95,allowed,False,,,True
+gold,en11,medium,"SELECT ROUND(SUM(total_aed), 2) AS revenue_aed FROM orders WHERE status != 'cancelled' AND order_date BETWEEN '2025-01-01' AND '2025-12-31'",ok,1.24,allowed,False,,,True
+gold,en12,medium,"SELECT strftime('%Y-%m', order_date) AS month, ROUND(SUM(total_aed), 2) AS revenue_aed FROM orders WHERE status != 'cancelled' AND order_date >= '2026-01-01' GROUP BY month ORDER BY month",ok,1.59,allowed,False,,,True
+gold,en13,medium,"SELECT strftime('%Y-%m', order_date) AS month, ROUND(SUM(total_aed), 2) AS revenue_aed FROM orders WHERE status != 'cancelled' GROUP BY month ORDER BY revenue_aed DESC LIMIT 1",ok,1.5,allowed,False,,,True
+gold,en14,medium,"SELECT p.name, SUM(oi.qty) AS units FROM order_items oi JOIN orders o ON o.order_id = oi.order_id JOIN products p ON p.id = oi.product_id WHERE o.status != 'cancelled' GROUP BY p.id, p.name ORDER BY units DESC LIMIT 5",ok,6.62,allowed,False,,,True
+gold,en15,medium,"SELECT destination_city, ROUND(AVG(julianday(delivered_date) - julianday(promised_date)), 2) AS avg_delay_days FROM orders WHERE delivered_date IS NOT NULL GROUP BY destination_city",ok,1.77,allowed,False,,,True
+gold,en16,medium,"SELECT destination_city, COUNT(*) AS orders FROM orders GROUP BY destination_city ORDER BY orders DESC LIMIT 1",ok,1.33,allowed,False,,,True
+gold,en17,medium,"SELECT channel, ROUND(SUM(total_aed), 2) AS revenue_aed FROM orders WHERE status != 'cancelled' GROUP BY channel",ok,1.32,allowed,False,,,True
+gold,en18,medium,"SELECT ROUND(SUM(total_aed) / COUNT(*), 2) AS aov_aed FROM orders WHERE status != 'cancelled'",ok,1.26,allowed,False,,,True
+gold,en19,medium,SELECT COUNT(*) AS late_orders FROM orders WHERE delivered_date IS NOT NULL AND julianday(delivered_date) - julianday(promised_date) > 0,ok,1.37,allowed,False,,,True
+gold,en20,medium,"SELECT reason, COUNT(*) AS returns FROM returns GROUP BY reason",ok,1.09,allowed,False,,,True
+gold,en21,medium,"SELECT p.category, ROUND(SUM(oi.qty * oi.unit_price_aed), 2) AS revenue_aed FROM order_items oi JOIN orders o ON o.order_id = oi.order_id JOIN products p ON p.id = oi.product_id WHERE o.status != 'cancelled' GROUP BY p.category",ok,2.23,allowed,False,,,True
+gold,en22,medium,"SELECT p.category, ROUND(AVG(r.rating), 2) AS avg_rating FROM reviews r JOIN products p ON p.id = r.product_id GROUP BY p.category",ok,1.6,allowed,False,,,True
+gold,en23,medium,"SELECT destination_country, COUNT(*) AS orders FROM orders GROUP BY destination_country",ok,1.08,allowed,False,,,True
+gold,en24,medium,"SELECT ROUND(100.0 * SUM(status = 'cancelled') / COUNT(*), 1) AS cancelled_pct FROM orders",ok,1.21,allowed,False,,,True
+gold,en25,hard,"SELECT ROUND(100.0 * SUM(n >= 2) / COUNT(*), 1) AS repeat_rate_pct FROM (SELECT customer_id, COUNT(*) AS n FROM orders WHERE status != 'cancelled' GROUP BY customer_id)",ok,2.46,allowed,False,,,True
+gold,en26,hard,"SELECT p.name, ROUND(1.0 * COALESCE(r.units, 0) / s.units, 4) AS return_rate FROM products p JOIN (SELECT oi.product_id, SUM(oi.qty) AS units FROM order_items oi JOIN orders o ON o.order_id = oi.order_id WHERE o.status != 'cancelled' GROUP BY oi.product_id) s ON s.product_id = p.id LEFT JOIN (SELECT product_id, SUM(qty) AS units FROM returns GROUP BY product_id) r ON r.product_id = p.id ORDER BY return_rate DESC LIMIT 3",ok,3.82,allowed,False,,,True
+gold,en27,hard,"SELECT p.name, ROUND(AVG(r.rating), 2) AS avg_rating FROM reviews r JOIN products p ON p.id = r.product_id GROUP BY p.id, p.name HAVING COUNT(*) >= 20 ORDER BY avg_rating ASC LIMIT 1",ok,3.55,allowed,False,,,True
+gold,en28,hard,"SELECT month, ROUND(revenue - LAG(revenue) OVER (ORDER BY month), 2) AS increase_aed FROM (SELECT strftime('%Y-%m', order_date) AS month, SUM(total_aed) AS revenue FROM orders WHERE status != 'cancelled' GROUP BY month) ORDER BY increase_aed DESC LIMIT 1",ok,3.56,allowed,False,,,True
+gold,en29,hard,"SELECT ROUND((SELECT SUM(total_aed) FROM orders WHERE status != 'cancelled' AND order_date BETWEEN '2026-07-01' AND '2026-09-30') - (SELECT COALESCE(SUM(r.refund_aed), 0) FROM returns r JOIN orders o ON o.order_id = r.order_id WHERE o.order_date BETWEEN '2026-07-01' AND '2026-09-30'), 2) AS net_revenue_aed",ok,7.21,allowed,False,,,True
+gold,en30,hard,"SELECT COUNT(*) AS new_customers_2026 FROM (SELECT customer_id, MIN(order_date) AS first_order FROM orders GROUP BY customer_id) WHERE first_order >= '2026-01-01'",ok,2.35,allowed,False,,,True
+gold,ar01,easy,SELECT COUNT(*) AS customers FROM customers,ok,1.31,allowed,False,,,True
+gold,ar02,easy,SELECT COUNT(*) AS cancelled_orders FROM orders WHERE status = 'cancelled',ok,1.08,allowed,False,,,True
+gold,ar03,easy,"SELECT name, price_aed FROM products ORDER BY price_aed DESC LIMIT 1",ok,1.76,allowed,False,,,True
+gold,ar05,easy,SELECT COUNT(*) AS cod_orders FROM orders WHERE payment_method = 'cod',ok,1.01,allowed,False,,,True
+gold,ar07,easy,"SELECT category, COUNT(*) AS products FROM products GROUP BY category",ok,1.58,allowed,False,,,True
+gold,ar11,medium,"SELECT ROUND(SUM(total_aed), 2) AS revenue_aed FROM orders WHERE status != 'cancelled' AND order_date BETWEEN '2025-01-01' AND '2025-12-31'",ok,1.29,allowed,False,,,True
+gold,ar12,medium,"SELECT strftime('%Y-%m', order_date) AS month, ROUND(SUM(total_aed), 2) AS revenue_aed FROM orders WHERE status != 'cancelled' AND order_date >= '2026-01-01' GROUP BY month ORDER BY month",ok,1.71,allowed,False,,,True
+gold,ar13,medium,"SELECT strftime('%Y-%m', order_date) AS month, ROUND(SUM(total_aed), 2) AS revenue_aed FROM orders WHERE status != 'cancelled' GROUP BY month ORDER BY revenue_aed DESC LIMIT 1",ok,1.93,allowed,False,,,True
+gold,ar14,medium,"SELECT p.name, SUM(oi.qty) AS units FROM order_items oi JOIN orders o ON o.order_id = oi.order_id JOIN products p ON p.id = oi.product_id WHERE o.status != 'cancelled' GROUP BY p.id, p.name ORDER BY units DESC LIMIT 5",ok,2.45,allowed,False,,,True
+gold,ar15,medium,"SELECT destination_city, ROUND(AVG(julianday(delivered_date) - julianday(promised_date)), 2) AS avg_delay_days FROM orders WHERE delivered_date IS NOT NULL GROUP BY destination_city",ok,1.51,allowed,False,,,True
+gold,ar17,medium,"SELECT channel, ROUND(SUM(total_aed), 2) AS revenue_aed FROM orders WHERE status != 'cancelled' GROUP BY channel",ok,1.77,allowed,False,,,True
+gold,ar18,medium,"SELECT ROUND(SUM(total_aed) / COUNT(*), 2) AS aov_aed FROM orders WHERE status != 'cancelled'",ok,1.3,allowed,False,,,True
+gold,ar19,medium,SELECT COUNT(*) AS late_orders FROM orders WHERE delivered_date IS NOT NULL AND julianday(delivered_date) - julianday(promised_date) > 0,ok,1.61,allowed,False,,,True
+gold,ar20,medium,"SELECT reason, COUNT(*) AS returns FROM returns GROUP BY reason",ok,1.49,allowed,False,,,True
+gold,ar21,medium,"SELECT p.category, ROUND(SUM(oi.qty * oi.unit_price_aed), 2) AS revenue_aed FROM order_items oi JOIN orders o ON o.order_id = oi.order_id JOIN products p ON p.id = oi.product_id WHERE o.status != 'cancelled' GROUP BY p.category",ok,2.8,allowed,False,,,True
+gold,ar25,hard,"SELECT ROUND(100.0 * SUM(n >= 2) / COUNT(*), 1) AS repeat_rate_pct FROM (SELECT customer_id, COUNT(*) AS n FROM orders WHERE status != 'cancelled' GROUP BY customer_id)",ok,1.84,allowed,False,,,True
+gold,ar26,hard,"SELECT p.name, ROUND(1.0 * COALESCE(r.units, 0) / s.units, 4) AS return_rate FROM products p JOIN (SELECT oi.product_id, SUM(oi.qty) AS units FROM order_items oi JOIN orders o ON o.order_id = oi.order_id WHERE o.status != 'cancelled' GROUP BY oi.product_id) s ON s.product_id = p.id LEFT JOIN (SELECT product_id, SUM(qty) AS units FROM returns GROUP BY product_id) r ON r.product_id = p.id ORDER BY return_rate DESC LIMIT 3",ok,3.69,allowed,False,,,True
+gold,ar27,hard,"SELECT p.name, ROUND(AVG(r.rating), 2) AS avg_rating FROM reviews r JOIN products p ON p.id = r.product_id GROUP BY p.id, p.name HAVING COUNT(*) >= 20 ORDER BY avg_rating ASC LIMIT 1",ok,2.18,allowed,False,,,True
+gold,ar28,hard,"SELECT month, ROUND(revenue - LAG(revenue) OVER (ORDER BY month), 2) AS increase_aed FROM (SELECT strftime('%Y-%m', order_date) AS month, SUM(total_aed) AS revenue FROM orders WHERE status != 'cancelled' GROUP BY month) ORDER BY increase_aed DESC LIMIT 1",ok,2.41,allowed,False,,,True
+gold,ar30,hard,"SELECT COUNT(*) AS new_customers_2026 FROM (SELECT customer_id, MIN(order_date) AS first_order FROM orders GROUP BY customer_id) WHERE first_order >= '2026-01-01'",ok,1.7,allowed,False,,,True

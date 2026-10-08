@@ -1,0 +1,50 @@
+{"id": "en01", "columns": ["customers"], "rows": [[2000]]}
+{"id": "en02", "columns": ["cancelled_orders"], "rows": [[197]]}
+{"id": "en03", "columns": ["name", "price_aed"], "rows": [["Peptide Firming Serum", 189.0]]}
+{"id": "en04", "columns": ["out_of_stock"], "rows": [[1]]}
+{"id": "en05", "columns": ["cod_orders"], "rows": [[1434]]}
+{"id": "en06", "columns": ["avg_rating"], "rows": [[3.8]]}
+{"id": "en07", "columns": ["category", "products"], "rows": [["cleanser", 8], ["mask", 8], ["moisturiser", 8], ["serum", 8], ["sunscreen", 8]]}
+{"id": "en08", "columns": ["arabic_customers"], "rows": [[644]]}
+{"id": "en09", "columns": ["instagram_orders"], "rows": [[969]]}
+{"id": "en10", "columns": ["total_refunded_aed"], "rows": [[36163.8]]}
+{"id": "en11", "columns": ["revenue_aed"], "rows": [[420890.2]]}
+{"id": "en12", "columns": ["month", "revenue_aed"], "rows": [["2026-01", 59023.0], ["2026-02", 51331.0], ["2026-03", 68197.0], ["2026-04", 48065.0], ["2026-05", 57392.0], ["2026-06", 60049.0], ["2026-07", 45159.0], ["2026-08", 50302.0], ["2026-09", 58804.0]]}
+{"id": "en13", "columns": ["month", "revenue_aed"], "rows": [["2025-12", 73078.0]]}
+{"id": "en14", "columns": ["name", "units"], "rows": [["Daily Fluid SPF 50+", 890], ["Vitamin C Brightening Serum", 634], ["Snail Mucin Repair Essence", 507], ["Niacinamide 10% + Zinc Serum", 501], ["Gentle Foam Cleanser", 495]]}
+{"id": "en15", "columns": ["destination_city", "avg_delay_days"], "rows": [["Abu Dhabi", -0.17], ["Ajman", 0.04], ["Al Ain", 0.52], ["Doha", -1.29], ["Dubai", -0.17], ["Jeddah", -0.34], ["Kuwait City", -1.15], ["Manama", -1.26], ["Muscat", 0.48], ["Ras Al Khaimah", 0.92], ["Riyadh", -1.05], ["Sharjah", -0.09]]}
+{"id": "en16", "columns": ["destination_city", "orders"], "rows": [["Dubai", 1638]]}
+{"id": "en17", "columns": ["channel", "revenue_aed"], "rows": [["app", 326152.4], ["instagram", 181073.0], ["website", 411986.8]]}
+{"id": "en18", "columns": ["aov_aed"], "rows": [[191.38]]}
+{"id": "en19", "columns": ["late_orders"], "rows": [[1388]]}
+{"id": "en20", "columns": ["reason", "returns"], "rows": [["changed_mind", 72], ["damaged", 65], ["not_as_described", 82], ["skin_reaction", 30], ["wrong_item", 71]]}
+{"id": "en21", "columns": ["category", "revenue_aed"], "rows": [["cleanser", 111953.4], ["mask", 107012.2], ["moisturiser", 179200.6], ["serum", 300920.8], ["sunscreen", 220125.2]]}
+{"id": "en22", "columns": ["category", "avg_rating"], "rows": [["cleanser", 3.8], ["mask", 3.83], ["moisturiser", 3.94], ["serum", 3.64], ["sunscreen", 3.85]]}
+{"id": "en23", "columns": ["destination_country", "orders"], "rows": [["Bahrain", 118], ["Kuwait", 165], ["Oman", 166], ["Qatar", 232], ["Saudi Arabia", 410], ["United Arab Emirates", 3909]]}
+{"id": "en24", "columns": ["cancelled_pct"], "rows": [[3.9]]}
+{"id": "en25", "columns": ["repeat_rate_pct"], "rows": [[73.7]]}
+{"id": "en26", "columns": ["name", "return_rate"], "rows": [["Tinted Sun Cream SPF 30", 0.1174], ["AHA Peel Mask", 0.1], ["Retinol 0.3% Night Serum", 0.0613]]}
+{"id": "en27", "columns": ["name", "avg_rating"], "rows": [["Cica Recovery Balm", 3.31]]}
+{"id": "en28", "columns": ["month", "increase_aed"], "rows": [["2025-11", 20345.2]]}
+{"id": "en29", "columns": ["net_revenue_aed"], "rows": [[148900.0]]}
+{"id": "en30", "columns": ["new_customers_2026"], "rows": [[497]]}
+{"id": "ar01", "columns": ["customers"], "rows": [[2000]]}
+{"id": "ar02", "columns": ["cancelled_orders"], "rows": [[197]]}
+{"id": "ar03", "columns": ["name", "price_aed"], "rows": [["Peptide Firming Serum", 189.0]]}
+{"id": "ar05", "columns": ["cod_orders"], "rows": [[1434]]}
+{"id": "ar07", "columns": ["category", "products"], "rows": [["cleanser", 8], ["mask", 8], ["moisturiser", 8], ["serum", 8], ["sunscreen", 8]]}
+{"id": "ar11", "columns": ["revenue_aed"], "rows": [[420890.2]]}
+{"id": "ar12", "columns": ["month", "revenue_aed"], "rows": [["2026-01", 59023.0], ["2026-02", 51331.0], ["2026-03", 68197.0], ["2026-04", 48065.0], ["2026-05", 57392.0], ["2026-06", 60049.0], ["2026-07", 45159.0], ["2026-08", 50302.0], ["2026-09", 58804.0]]}
+{"id": "ar13", "columns": ["month", "revenue_aed"], "rows": [["2025-12", 73078.0]]}
+{"id": "ar14", "columns": ["name", "units"], "rows": [["Daily Fluid SPF 50+", 890], ["Vitamin C Brightening Serum", 634], ["Snail Mucin Repair Essence", 507], ["Niacinamide 10% + Zinc Serum", 501], ["Gentle Foam Cleanser", 495]]}
+{"id": "ar15", "columns": ["destination_city", "avg_delay_days"], "rows": [["Abu Dhabi", -0.17], ["Ajman", 0.04], ["Al Ain", 0.52], ["Doha", -1.29], ["Dubai", -0.17], ["Jeddah", -0.34], ["Kuwait City", -1.15], ["Manama", -1.26], ["Muscat", 0.48], ["Ras Al Khaimah", 0.92], ["Riyadh", -1.05], ["Sharjah", -0.09]]}
+{"id": "ar17", "columns": ["channel", "revenue_aed"], "rows": [["app", 326152.4], ["instagram", 181073.0], ["website", 411986.8]]}
+{"id": "ar18", "columns": ["aov_aed"], "rows": [[191.38]]}
+{"id": "ar19", "columns": ["late_orders"], "rows": [[1388]]}
+{"id": "ar20", "columns": ["reason", "returns"], "rows": [["changed_mind", 72], ["damaged", 65], ["not_as_described", 82], ["skin_reaction", 30], ["wrong_item", 71]]}
+{"id": "ar21", "columns": ["category", "revenue_aed"], "rows": [["cleanser", 111953.4], ["mask", 107012.2], ["moisturiser", 179200.6], ["serum", 300920.8], ["sunscreen", 220125.2]]}
+{"id": "ar25", "columns": ["repeat_rate_pct"], "rows": [[73.7]]}
+{"id": "ar26", "columns": ["name", "return_rate"], "rows": [["Tinted Sun Cream SPF 30", 0.1174], ["AHA Peel Mask", 0.1], ["Retinol 0.3% Night Serum", 0.0613]]}
+{"id": "ar27", "columns": ["name", "avg_rating"], "rows": [["Cica Recovery Balm", 3.31]]}
+{"id": "ar28", "columns": ["month", "increase_aed"], "rows": [["2025-11", 20345.2]]}
+{"id": "ar30", "columns": ["new_customers_2026"], "rows": [[497]]}
