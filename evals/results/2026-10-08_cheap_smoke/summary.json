@@ -1,0 +1,101 @@
+{
+  "label": "real run",
+  "model": "openai/gpt-6-luna",
+  "model_role": "cheap",
+  "run_date": "2026-10-08",
+  "command": "python -m evals.run --model cheap --limit 8 --skip-safety --max-cost 0.2 --tag smoke",
+  "execution_accuracy": {
+    "questions": 8,
+    "correct": 8,
+    "accuracy": 1.0
+  },
+  "by_language": {
+    "en": {
+      "questions": 8,
+      "correct": 8,
+      "accuracy": 1.0
+    }
+  },
+  "by_difficulty": {
+    "easy": {
+      "questions": 8,
+      "correct": 8,
+      "accuracy": 1.0
+    }
+  },
+  "total_cost_usd": 0.002,
+  "mean_cost_usd_per_question": 0.000245,
+  "median_latency_s": 6.62,
+  "max_latency_s": 12.73,
+  "sql": {
+    "first_sql_valid": {
+      "count": 8,
+      "of": 8,
+      "rate": 1.0
+    },
+    "final_sql_valid": {
+      "count": 8,
+      "of": 8,
+      "rate": 1.0
+    },
+    "questions_with_a_retry": {
+      "count": 0,
+      "of": 8,
+      "rate": 0.0
+    },
+    "retries_total": 0,
+    "retry_fixed_it": 0,
+    "questions_with_a_guard_block": {
+      "count": 0,
+      "of": 8,
+      "rate": 0.0
+    },
+    "guard_blocks_total": 0,
+    "sqlite_errors_total": 0,
+    "outcomes": {
+      "answered": 8
+    }
+  },
+  "cost_latency_by_language": {
+    "en": {
+      "cost_usd": 0.001958,
+      "mean_cost_usd": 0.000245,
+      "mean_latency_s": 7.22,
+      "median_latency_s": 6.62,
+      "max_latency_s": 12.73,
+      "mean_llm_calls": 3.0
+    }
+  },
+  "sql_by_language": {
+    "en": {
+      "first_sql_valid": {
+        "count": 8,
+        "of": 8,
+        "rate": 1.0
+      },
+      "final_sql_valid": {
+        "count": 8,
+        "of": 8,
+        "rate": 1.0
+      },
+      "questions_with_a_retry": {
+        "count": 0,
+        "of": 8,
+        "rate": 0.0
+      },
+      "retries_total": 0,
+      "retry_fixed_it": 0,
+      "questions_with_a_guard_block": {
+        "count": 0,
+        "of": 8,
+        "rate": 0.0
+      },
+      "guard_blocks_total": 0,
+      "sqlite_errors_total": 0,
+      "outcomes": {
+        "answered": 8
+      }
+    }
+  },
+  "database_unchanged": true
+}

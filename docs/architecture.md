@@ -51,8 +51,9 @@ or addresses, which is exactly what the guard's personal-data rule is for.
 ```mermaid
 flowchart TD
     Q["Question (English or Arabic)"] --> P["plan (LLM)"]
-    P -- "REFUSE: change data / personal data" --> R["refuse: fixed polite answer"]
+    P -- "REFUSE: change data / personal data,<br/>or the model provider refused" --> R["refuse: fixed polite answer"]
     P --> W["write_sql (LLM)"]
+    W -- "model provider refused" --> R
     W --> X["run_sql: MCP tool run_select"]
     X -- "error or no rows, first try" --> W
     X --> A["answer (LLM) in the question's language<br/>+ SQL + small table"]

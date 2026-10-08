@@ -37,6 +37,8 @@ class LLMReply:
     completion_tokens: int = 0
     cost_usd: float | None = None  # OpenRouter reports the real cost in `usage`
     latency_ms: float = 0.0
+    # "stop" normally. "content_filter" = the provider refused and sent no text (seen live with Claude models).
+    finish_reason: str = ""
 
 
 def load_settings() -> None:
@@ -97,14 +99,16 @@ class OpenRouterLLM:
             raise
         usage = response.usage
         extra = (usage.model_extra or {}) if usage else {}
+        choice = response.choices[0]
         reply = LLMReply(
-            text=response.choices[0].message.content or "",
+            text=choice.message.content or "",
             model=response.model or self.model,
             purpose=purpose,
             prompt_tokens=usage.prompt_tokens if usage else 0,
             completion_tokens=usage.completion_tokens if usage else 0,
             cost_usd=extra.get("cost"),
             latency_ms=round((time.perf_counter() - started) * 1000, 1),
+            finish_reason=choice.finish_reason or "",
         )
         write_trace(self.trace_path, reply, outcome="ok")
         return reply

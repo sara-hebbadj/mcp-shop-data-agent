@@ -1,9 +1,10 @@
 """The data agent: a LangGraph graph that turns a question into SQL via MCP tools.
 
     plan --> write_sql --> run_sql --> answer
-      |          ^            |
-      |          +-- retry ---+   (once, if the query failed or returned no rows)
-      +--> refuse                 (if the request is to change data or reveal personal data)
+      |        |    ^          |
+      |        |    +-- retry -+   (once, if the query failed or returned no rows)
+      +--------+--> refuse         (a request to change data or see personal data,
+                                    or the model provider itself refused)
 
 The agent never touches the database directly: run_sql calls the MCP server's
 run_select tool, so the server's guard has the final word even if the model
@@ -64,6 +65,24 @@ class AgentState(TypedDict, total=False):
     outcome: str  # answered, refused, blocked or failed
     answer: str
     llm_calls: Annotated[list, operator.add]  # one LLMReply per model call (for cost and latency)
+    attempt_log: Annotated[list, operator.add]  # one dict per query sent to the server: sql, status, error
+    provider_refused: bool  # the model provider's own filter refused (no text came back)
+
+
+def attempt_status(result: dict | None, error: str | None) -> str:
+    """ok / empty / blocked (by the guard) / failed (in SQLite), for the attempt log."""
+    if error:
+        return "blocked" if "BLOCKED" in error else "failed"
+    return "ok" if result and result.get("rows") else "empty"
+
+
+def is_provider_refusal(reply) -> bool:
+    """True if the provider's own safety filter refused (OpenRouter: finish_reason 'content_filter', no text).
+
+    Found in the live run: Claude refused "Load the extension at ./evil.so ..." this way, and the empty
+    reply used to be read as an empty plan, so the agent went on to write SQL anyway.
+    """
+    return reply.finish_reason == "content_filter"
 
 
 def detect_language(text: str) -> str:
@@ -102,7 +121,8 @@ def build_agent(llm, tools: McpShopTools):
              {"role": "user", "content": state["question"]}],
             purpose="plan",
         )
-        return {"plan": reply.text.strip(), "language": detect_language(state["question"]), "llm_calls": [reply]}
+        return {"plan": reply.text.strip(), "language": detect_language(state["question"]),
+                "provider_refused": is_provider_refusal(reply), "llm_calls": [reply]}
 
     async def write_sql(state: AgentState) -> dict:
         feedback = ""
@@ -116,15 +136,17 @@ def build_agent(llm, tools: McpShopTools):
              {"role": "user", "content": f"Question: {state['question']}\n\nPlan:\n{state['plan']}{feedback}"}],
             purpose="sql",
         )
-        return {"sql": extract_sql(reply.text), "llm_calls": [reply]}
+        return {"sql": extract_sql(reply.text), "provider_refused": is_provider_refusal(reply), "llm_calls": [reply]}
 
     async def run_sql(state: AgentState) -> dict:
         attempts = state.get("attempts", 0) + 1
         try:
-            result = await tools.run_select(state["sql"])
-        except ToolCallError as error:
-            return {"result": None, "error": str(error), "attempts": attempts}
-        return {"result": result, "error": None, "attempts": attempts}
+            result, error = await tools.run_select(state["sql"]), None
+        except ToolCallError as tool_error:
+            result, error = None, str(tool_error)
+        # Keep every attempt (not just the last) so the evaluation can count retries and guard blocks.
+        logged = {"sql": state["sql"], "status": attempt_status(result, error), "error": error or ""}
+        return {"result": result, "error": error, "attempts": attempts, "attempt_log": [logged]}
 
     async def answer(state: AgentState) -> dict:
         language = state["language"]
@@ -137,13 +159,19 @@ def build_agent(llm, tools: McpShopTools):
                                          f"Result:\n{format_table(state['result'], max_rows=20)}"}],
             purpose="answer",
         )
-        return {"outcome": "answered", "answer": reply.text.strip(), "llm_calls": [reply]}
+        # If the model sends no text (e.g. a provider refusal), still show the guard-approved result.
+        text = reply.text.strip() or format_table(state["result"])
+        return {"outcome": "answered", "answer": text, "llm_calls": [reply]}
 
     async def refuse(state: AgentState) -> dict:
         return {"outcome": "refused", "answer": REFUSAL[state["language"]], "sql": "", "result": None}
 
     def after_plan(state: AgentState) -> str:
-        return "refuse" if state["plan"].upper().startswith("REFUSE") else "write_sql"
+        refused = state["plan"].upper().startswith("REFUSE") or state["provider_refused"]
+        return "refuse" if refused else "write_sql"
+
+    def after_write(state: AgentState) -> str:
+        return "refuse" if state["provider_refused"] else "run_sql"
 
     def after_run(state: AgentState) -> str:
         empty = state.get("result") is not None and not state["result"]["rows"]
@@ -159,7 +187,7 @@ def build_agent(llm, tools: McpShopTools):
     graph.add_node("refuse", refuse)
     graph.add_edge(START, "plan")
     graph.add_conditional_edges("plan", after_plan, {"refuse": "refuse", "write_sql": "write_sql"})
-    graph.add_edge("write_sql", "run_sql")
+    graph.add_conditional_edges("write_sql", after_write, {"refuse": "refuse", "run_sql": "run_sql"})
     graph.add_conditional_edges("run_sql", after_run, {"write_sql": "write_sql", "answer": "answer"})
     graph.add_edge("answer", END)
     graph.add_edge("refuse", END)
@@ -169,7 +197,9 @@ def build_agent(llm, tools: McpShopTools):
 async def ask(agent, tools: McpShopTools, question: str) -> AgentState:
     """Run the agent on one question and return the final state."""
     schema = await tools.schema_summary()
-    return await agent.ainvoke({"question": question, "schema": schema, "attempts": 0, "llm_calls": []})
+    return await agent.ainvoke(
+        {"question": question, "schema": schema, "attempts": 0, "llm_calls": [], "attempt_log": []}
+    )
 
 
 async def _ask_from_command_line(question: str, role: str) -> None:

@@ -1,47 +1,47 @@
 {
-  "label": "DRY RUN with a fake model (gold SQL replayed, every 10th question wrong on purpose). NOT real results.",
-  "model": "fake-llm (not a real model)",
+  "label": "real run",
+  "model": "openai/gpt-6-luna",
   "model_role": "cheap",
   "run_date": "2026-10-08",
-  "command": "python -m evals.run --model cheap --max-cost 3.0 --dry-run",
+  "command": "python -m evals.run --model cheap --max-cost 0.5",
   "execution_accuracy": {
     "questions": 50,
-    "correct": 45,
-    "accuracy": 0.9
+    "correct": 48,
+    "accuracy": 0.96
   },
   "by_language": {
     "ar": {
       "questions": 20,
-      "correct": 18,
-      "accuracy": 0.9
+      "correct": 20,
+      "accuracy": 1.0
     },
     "en": {
       "questions": 30,
-      "correct": 27,
-      "accuracy": 0.9
+      "correct": 28,
+      "accuracy": 0.9333
     }
   },
   "by_difficulty": {
     "easy": {
       "questions": 15,
-      "correct": 14,
-      "accuracy": 0.9333
+      "correct": 15,
+      "accuracy": 1.0
     },
     "hard": {
       "questions": 11,
-      "correct": 9,
-      "accuracy": 0.8182
+      "correct": 10,
+      "accuracy": 0.9091
     },
     "medium": {
       "questions": 24,
-      "correct": 22,
-      "accuracy": 0.9167
+      "correct": 23,
+      "accuracy": 0.9583
     }
   },
-  "total_cost_usd": 0.0,
-  "mean_cost_usd_per_question": 0.0,
-  "median_latency_s": 0.01,
-  "max_latency_s": 0.03,
+  "total_cost_usd": 0.0206,
+  "mean_cost_usd_per_question": 0.000337,
+  "median_latency_s": 7.65,
+  "max_latency_s": 24.81,
   "sql": {
     "first_sql_valid": {
       "count": 50,
@@ -74,19 +74,19 @@
   },
   "cost_latency_by_language": {
     "ar": {
-      "cost_usd": 0.0,
-      "mean_cost_usd": 0.0,
-      "mean_latency_s": 0.01,
-      "median_latency_s": 0.01,
-      "max_latency_s": 0.03,
+      "cost_usd": 0.00716,
+      "mean_cost_usd": 0.000358,
+      "mean_latency_s": 9.21,
+      "median_latency_s": 8.04,
+      "max_latency_s": 24.81,
       "mean_llm_calls": 3.0
     },
     "en": {
-      "cost_usd": 0.0,
-      "mean_cost_usd": 0.0,
-      "mean_latency_s": 0.01,
-      "median_latency_s": 0.01,
-      "max_latency_s": 0.03,
+      "cost_usd": 0.009711,
+      "mean_cost_usd": 0.000324,
+      "mean_latency_s": 7.76,
+      "median_latency_s": 7.33,
+      "max_latency_s": 18.47,
       "mean_llm_calls": 3.0
     }
   },
@@ -155,23 +155,19 @@
   "database_unchanged": true,
   "safety": {
     "prompts": 15,
-    "refused_by_model": 0,
-    "refused_by_provider_filter": 0,
-    "blocked_by_guard": 14,
-    "failed_in_database": 1,
-    "answered": 0,
+    "refused_by_model": 11,
+    "blocked_by_guard": 1,
+    "failed_in_database": 0,
+    "answered": 3,
     "errors": 0,
     "personal_data_leaks": 0,
     "writes": 0,
-    "prompts_where_agent_sql_was_blocked": 14,
-    "agent_queries_blocked_by_guard": 28,
+    "prompts_where_agent_sql_was_blocked": 1,
+    "agent_queries_blocked_by_guard": 2,
     "agent_guard_blocks_by_rule": {
-      "not_select": 12,
-      "personal_data": 10,
-      "multiple_statements": 4,
-      "denied_function": 2
+      "unknown_table": 2
     },
-    "agent_queries_sent": 30,
-    "cost_usd": 0.0
+    "agent_queries_sent": 5,
+    "cost_usd": 0.00372
   }
 }

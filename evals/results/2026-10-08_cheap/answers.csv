@@ -1,0 +1,428 @@
+id,lang,difficulty,question,predicted_sql,outcome,attempts,correct,answer,error,latency_s,llm_calls,prompt_tokens,completion_tokens,cost_usd,retries,attempt_statuses,guard_blocks,guard_rules,sqlite_errors,first_sql_valid,final_sql_valid,attempts_detail
+en01,en,easy,How many customers are registered?,"SELECT COUNT(*) AS registered_customers
+FROM customers;",answered,1,True,"There are 2,000 registered customers.",,6.63,3,2186,134,9.8e-05,0,ok,0,,0,True,True,"[{""sql"": ""SELECT COUNT(*) AS registered_customers\nFROM customers;"", ""status"": ""ok"", ""error"": """"}]"
+en02,en,easy,How many orders were cancelled?,"SELECT COUNT(*) AS cancelled_orders
+FROM orders
+WHERE status = 'cancelled';",answered,1,True,197 orders were cancelled.,,6.2,3,2197,136,0.00022,0,ok,0,,0,True,True,"[{""sql"": ""SELECT COUNT(*) AS cancelled_orders\nFROM orders\nWHERE status = 'cancelled';"", ""status"": ""ok"", ""error"": """"}]"
+en03,en,easy,"What is the most expensive product, and what is its price?","SELECT name, price_aed
+FROM products
+ORDER BY price_aed DESC
+LIMIT 1;",answered,1,True,"The most expensive product is Peptide Firming Serum, priced at AED 189.0.",,6.84,3,2241,178,0.000245,0,ok,0,,0,True,True,"[{""sql"": ""SELECT name, price_aed\nFROM products\nORDER BY price_aed DESC\nLIMIT 1;"", ""status"": ""ok"", ""error"": """"}]"
+en04,en,easy,How many products are out of stock right now?,"SELECT COUNT(*) AS out_of_stock_products
+FROM products
+WHERE stock = 0;",answered,1,True,1 product is out of stock right now.,,5.43,3,2209,135,0.00022,0,ok,0,,0,True,True,"[{""sql"": ""SELECT COUNT(*) AS out_of_stock_products\nFROM products\nWHERE stock = 0;"", ""status"": ""ok"", ""error"": """"}]"
+en05,en,easy,How many orders were paid with cash on delivery?,"SELECT COUNT(order_id)
+FROM orders
+WHERE payment_method = 'cod';",answered,1,True,"1,434 orders were paid with cash on delivery.",,7.06,3,2215,191,0.000249,0,ok,0,,0,True,True,"[{""sql"": ""SELECT COUNT(order_id)\nFROM orders\nWHERE payment_method = 'cod';"", ""status"": ""ok"", ""error"": """"}]"
+en06,en,easy,What is the average review rating across all reviews? Round to 2 decimals.,"SELECT ROUND(AVG(rating), 2) AS average_rating
+FROM reviews;",answered,1,True,The average review rating is **3.80**.,,5.44,3,2227,169,0.000238,0,ok,0,,0,True,True,"[{""sql"": ""SELECT ROUND(AVG(rating), 2) AS average_rating\nFROM reviews;"", ""status"": ""ok"", ""error"": """"}]"
+en07,en,easy,How many products are there in each category?,"SELECT category, COUNT(id) AS product_count
+FROM products
+GROUP BY category;",answered,1,True,"There are 8 products in each category: cleanser, mask, moisturiser, serum, and sunscreen.",,6.31,3,2242,137,0.000103,0,ok,0,,0,True,True,"[{""sql"": ""SELECT category, COUNT(id) AS product_count\nFROM products\nGROUP BY category;"", ""status"": ""ok"", ""error"": """"}]"
+en08,en,easy,How many customers prefer Arabic as their language?,"SELECT COUNT(*)
+FROM customers
+WHERE language = 'ar';",answered,1,True,644 customers prefer Arabic as their language.,,6.11,3,2201,143,0.000223,0,ok,0,,0,True,True,"[{""sql"": ""SELECT COUNT(*)\nFROM customers\nWHERE language = 'ar';"", ""status"": ""ok"", ""error"": """"}]"
+en09,en,easy,How many orders came through Instagram?,"SELECT COUNT(*) AS order_count
+FROM orders
+WHERE channel = 'instagram';",answered,1,True,969 orders came through Instagram.,,6.38,3,2198,126,0.000216,0,ok,0,,0,True,True,"[{""sql"": ""SELECT COUNT(*) AS order_count\nFROM orders\nWHERE channel = 'instagram';"", ""status"": ""ok"", ""error"": """"}]"
+en10,en,easy,"What is the total amount refunded for returns, in AED?","SELECT SUM(refund_aed) AS total_refunded_aed
+FROM returns;",answered,1,True,"The total amount refunded for returns is AED 36,163.8.",,7.17,3,2219,182,0.000246,0,ok,0,,0,True,True,"[{""sql"": ""SELECT SUM(refund_aed) AS total_refunded_aed\nFROM returns;"", ""status"": ""ok"", ""error"": """"}]"
+en11,en,medium,What was the total revenue in 2025?,"SELECT SUM(oi.qty * oi.unit_price_aed) AS total_revenue_aed
+FROM orders AS o
+JOIN order_items AS oi ON oi.order_id = o.order_id
+WHERE o.order_date >= '2025-01-01'
+  AND o.order_date < '2026-01-01'
+  AND o.status <> 'cancelled';",answered,1,True,"Total revenue in 2025 was **AED 420,890.20**.",,6.77,3,2292,278,0.000302,0,ok,0,,0,True,True,"[{""sql"": ""SELECT SUM(oi.qty * oi.unit_price_aed) AS total_revenue_aed\nFROM orders AS o\nJOIN order_items AS oi ON oi.order_id = o.order_id\nWHERE o.order_date >= '2025-01-01'\n  AND o.order_date < '2026-01-01'\n  AND o.status <> 'cancelled';"", ""status"": ""ok"", ""error"": """"}]"
+en12,en,medium,"Show the revenue for each month of 2026, in month order.","SELECT
+  strftime('%Y-%m', o.order_date) AS month,
+  SUM(oi.qty * oi.unit_price_aed) AS revenue_aed
+FROM orders AS o
+JOIN order_items AS oi ON oi.order_id = o.order_id
+WHERE o.order_date >= '2026-01-01'
+  AND o.order_date < '2027-01-01'
+  AND o.status <> 'cancelled'
+GROUP BY strftime('%Y-%m', o.order_date)
+ORDER BY month;",answered,1,True,"January: 59,023 AED; February: 51,331 AED; March: 68,197 AED; April: 48,065 AED; May: 57,392 AED; June: 60,049 AED; July: 45,159 AED; August: 50,302 AED; September: 58,804 AED.",,8.55,3,2468,434,0.000398,0,ok,0,,0,True,True,"[{""sql"": ""SELECT\n  strftime('%Y-%m', o.order_date) AS month,\n  SUM(oi.qty * oi.unit_price_aed) AS revenue_aed\nFROM orders AS o\nJOIN order_items AS oi ON oi.order_id = o.order_id\nWHERE o.order_date >= '2026-01-01'\n  AND o.order_date < '2027-01-01'\n  AND o.status <> 'cancelled'\nGROUP BY strftime('%Y-%m', o.order_date)\nORDER BY month;"", ""status"": ""ok"", ""error"": """"}]"
+en13,en,medium,Which month had the highest revenue?,"SELECT
+  strftime('%Y-%m', o.order_date) AS month,
+  SUM(oi.qty * oi.unit_price_aed) AS revenue_aed
+FROM orders AS o
+JOIN order_items AS oi ON oi.order_id = o.order_id
+WHERE o.status <> 'cancelled'
+GROUP BY strftime('%Y-%m', o.order_date)
+ORDER BY revenue_aed DESC
+LIMIT 1;",answered,1,True,"December 2025 had the highest revenue, at AED 73,078.",,7.94,3,2317,358,0.000345,0,ok,0,,0,True,True,"[{""sql"": ""SELECT\n  strftime('%Y-%m', o.order_date) AS month,\n  SUM(oi.qty * oi.unit_price_aed) AS revenue_aed\nFROM orders AS o\nJOIN order_items AS oi ON oi.order_id = o.order_id\nWHERE o.status <> 'cancelled'\nGROUP BY strftime('%Y-%m', o.order_date)\nORDER BY revenue_aed DESC\nLIMIT 1;"", ""status"": ""ok"", ""error"": """"}]"
+en14,en,medium,What are the top 5 products by units sold?,"SELECT p.name, SUM(oi.qty) AS units_sold
+FROM order_items AS oi
+JOIN orders AS o ON o.order_id = oi.order_id
+JOIN products AS p ON p.id = oi.product_id
+WHERE o.status <> 'cancelled'
+GROUP BY p.id, p.name
+ORDER BY units_sold DESC
+LIMIT 5;",answered,1,True,"The top 5 products by units sold are: Daily Fluid SPF 50+ (890 units), Vitamin C Brightening Serum (634), Snail Mucin Repair Essence (507), Niacinamide 10% + Zinc Serum (501), and Gentle Foam Cleanser (495).",,6.99,3,2353,311,0.000325,0,ok,0,,0,True,True,"[{""sql"": ""SELECT p.name, SUM(oi.qty) AS units_sold\nFROM order_items AS oi\nJOIN orders AS o ON o.order_id = oi.order_id\nJOIN products AS p ON p.id = oi.product_id\nWHERE o.status <> 'cancelled'\nGROUP BY p.id, p.name\nORDER BY units_sold DESC\nLIMIT 5;"", ""status"": ""ok"", ""error"": """"}]"
+en15,en,medium,What is the average delivery delay in days for each destination city?,"SELECT
+  destination_city,
+  AVG(julianday(delivered_date) - julianday(promised_date)) AS average_delivery_delay_days
+FROM orders
+WHERE delivered_date IS NOT NULL
+GROUP BY destination_city;",answered,1,True,Average delivery delay by destination city: Abu Dhabi −0.17 days; Ajman 0.04 days; Al Ain 0.52 days; Doha −1.29 days; Dubai −0.17 days; Jeddah −0.34 days; Kuwait City −1.15 days; Manama −1.26 days; Muscat 0.48 days; Ras Al Khaimah 0.92 days; Riyadh −1.05 days; Sharjah −0.09 days.,,7.33,3,2444,369,0.000363,0,ok,0,,0,True,True,"[{""sql"": ""SELECT\n  destination_city,\n  AVG(julianday(delivered_date) - julianday(promised_date)) AS average_delivery_delay_days\nFROM orders\nWHERE delivered_date IS NOT NULL\nGROUP BY destination_city;"", ""status"": ""ok"", ""error"": """"}]"
+en16,en,medium,Which destination city received the most orders?,"SELECT destination_city, COUNT(*) AS order_count
+FROM orders
+GROUP BY destination_city
+ORDER BY order_count DESC
+LIMIT 1;",answered,1,True,"Dubai received the most orders, with 1,638 orders.",,9.62,3,2247,424,0.00037,0,ok,0,,0,True,True,"[{""sql"": ""SELECT destination_city, COUNT(*) AS order_count\nFROM orders\nGROUP BY destination_city\nORDER BY order_count DESC\nLIMIT 1;"", ""status"": ""ok"", ""error"": """"}]"
+en17,en,medium,What is the revenue for each sales channel?,"SELECT o.channel,
+       SUM(oi.qty * oi.unit_price_aed) AS revenue_aed
+FROM orders AS o
+JOIN order_items AS oi ON oi.order_id = o.order_id
+WHERE o.status <> 'cancelled'
+GROUP BY o.channel
+ORDER BY revenue_aed DESC;",answered,1,True,"Revenue was AED 411,986.80 for the website, AED 326,152.40 for the app, and AED 181,073.00 for Instagram.",,6.89,3,2304,328,0.000328,0,ok,0,,0,True,True,"[{""sql"": ""SELECT o.channel,\n       SUM(oi.qty * oi.unit_price_aed) AS revenue_aed\nFROM orders AS o\nJOIN order_items AS oi ON oi.order_id = o.order_id\nWHERE o.status <> 'cancelled'\nGROUP BY o.channel\nORDER BY revenue_aed DESC;"", ""status"": ""ok"", ""error"": """"}]"
+en18,en,medium,What is the average order value? Round to 2 decimals.,"SELECT ROUND(
+    SUM(oi.qty * oi.unit_price_aed) / COUNT(DISTINCT o.order_id),
+    2
+) AS average_order_value_aed
+FROM orders AS o
+JOIN order_items AS oi ON oi.order_id = o.order_id
+WHERE o.status <> 'cancelled';",answered,1,True,The average order value is AED 191.38.,,7.03,3,2306,286,0.000308,0,ok,0,,0,True,True,"[{""sql"": ""SELECT ROUND(\n    SUM(oi.qty * oi.unit_price_aed) / COUNT(DISTINCT o.order_id),\n    2\n) AS average_order_value_aed\nFROM orders AS o\nJOIN order_items AS oi ON oi.order_id = o.order_id\nWHERE o.status <> 'cancelled';"", ""status"": ""ok"", ""error"": """"}]"
+en19,en,medium,How many orders were delivered later than the promised date?,"SELECT COUNT(*) AS late_orders
+FROM orders
+WHERE delivered_date IS NOT NULL
+  AND julianday(delivered_date) - julianday(promised_date) > 0;",answered,1,True,"1,388 orders were delivered later than the promised date.",,6.5,3,2247,194,0.000255,0,ok,0,,0,True,True,"[{""sql"": ""SELECT COUNT(*) AS late_orders\nFROM orders\nWHERE delivered_date IS NOT NULL\n  AND julianday(delivered_date) - julianday(promised_date) > 0;"", ""status"": ""ok"", ""error"": """"}]"
+en20,en,medium,How many returned lines are there for each return reason?,"SELECT reason, COUNT(*) AS returned_lines
+FROM returns
+GROUP BY reason;",answered,1,True,"There are 72 returned lines for changed_mind, 65 for damaged, 82 for not_as_described, 30 for skin_reaction, and 71 for wrong_item.",,7.65,3,2254,196,0.000257,0,ok,0,,0,True,True,"[{""sql"": ""SELECT reason, COUNT(*) AS returned_lines\nFROM returns\nGROUP BY reason;"", ""status"": ""ok"", ""error"": """"}]"
+en21,en,medium,What is the revenue for each product category?,"SELECT
+    p.category,
+    COALESCE(SUM(
+        CASE
+            WHEN o.order_id IS NOT NULL THEN oi.qty * oi.unit_price_aed
+            ELSE 0
+        END
+    ), 0) AS revenue_aed
+FROM products AS p
+LEFT JOIN order_items AS oi
+    ON oi.product_id = p.id
+LEFT JOIN orders AS o
+    ON o.order_id = oi.order_id
+   AND o.status <> 'cancelled'
+GROUP BY p.category
+ORDER BY p.category;",answered,1,True,"Revenue by product category: cleanser — AED 111,953.4; mask — AED 107,012.2; moisturiser — AED 179,200.6; serum — AED 300,920.8; sunscreen — AED 220,125.2.",,9.44,3,2382,580,0.000462,0,ok,0,,0,True,True,"[{""sql"": ""SELECT\n    p.category,\n    COALESCE(SUM(\n        CASE\n            WHEN o.order_id IS NOT NULL THEN oi.qty * oi.unit_price_aed\n            ELSE 0\n        END\n    ), 0) AS revenue_aed\nFROM products AS p\nLEFT JOIN order_items AS oi\n    ON oi.product_id = p.id\nLEFT JOIN orders AS o\n    ON o.order_id = oi.order_id\n   AND o.status <> 'cancelled'\nGROUP BY p.category\nORDER BY p.category;"", ""status"": ""ok"", ""error"": """"}]"
+en22,en,medium,What is the average review rating for each product category? Round to 2 decimals.,"SELECT
+  products.category,
+  ROUND(AVG(reviews.rating), 2) AS average_review_rating
+FROM reviews
+JOIN products ON reviews.product_id = products.id
+GROUP BY products.category;",answered,1,True,"Average review ratings by category are: cleanser 3.80, mask 3.83, moisturiser 3.94, serum 3.64, and sunscreen 3.85.",,8.11,3,2315,248,0.00029,0,ok,0,,0,True,True,"[{""sql"": ""SELECT\n  products.category,\n  ROUND(AVG(reviews.rating), 2) AS average_review_rating\nFROM reviews\nJOIN products ON reviews.product_id = products.id\nGROUP BY products.category;"", ""status"": ""ok"", ""error"": """"}]"
+en23,en,medium,How many orders were shipped to each destination country?,"SELECT destination_country, COUNT(*) AS order_count
+FROM orders
+WHERE shipped_date IS NOT NULL
+GROUP BY destination_country
+ORDER BY order_count DESC;",answered,1,False,"Shipped orders by destination country: United Arab Emirates: 3,737; Saudi Arabia: 402; Qatar: 227; Kuwait: 159; Oman: 158; Bahrain: 115.",,8.36,3,2279,332,0.000327,0,ok,0,,0,True,True,"[{""sql"": ""SELECT destination_country, COUNT(*) AS order_count\nFROM orders\nWHERE shipped_date IS NOT NULL\nGROUP BY destination_country\nORDER BY order_count DESC;"", ""status"": ""ok"", ""error"": """"}]"
+en24,en,medium,What percentage of all orders were cancelled? Round to 1 decimal.,"SELECT ROUND(100.0 * SUM(CASE WHEN status = 'cancelled' THEN 1 ELSE 0 END) / COUNT(*), 1) AS cancellation_percentage
+FROM orders;",answered,1,True,3.9% of all orders were cancelled.,,7.55,3,2256,276,0.000297,0,ok,0,,0,True,True,"[{""sql"": ""SELECT ROUND(100.0 * SUM(CASE WHEN status = 'cancelled' THEN 1 ELSE 0 END) / COUNT(*), 1) AS cancellation_percentage\nFROM orders;"", ""status"": ""ok"", ""error"": """"}]"
+en25,en,hard,"What is the repeat customer rate (as a percentage, 1 decimal)?","SELECT ROUND(
+    100.0 * SUM(CASE WHEN order_count >= 2 THEN 1 ELSE 0 END) / COUNT(*),
+    1
+) AS repeat_customer_rate
+FROM (
+    SELECT customer_id, COUNT(*) AS order_count
+    FROM orders
+    WHERE status <> 'cancelled'
+    GROUP BY customer_id
+);",answered,1,True,The repeat customer rate is **73.7%**.,,7.86,3,2313,433,0.000382,0,ok,0,,0,True,True,"[{""sql"": ""SELECT ROUND(\n    100.0 * SUM(CASE WHEN order_count >= 2 THEN 1 ELSE 0 END) / COUNT(*),\n    1\n) AS repeat_customer_rate\nFROM (\n    SELECT customer_id, COUNT(*) AS order_count\n    FROM orders\n    WHERE status <> 'cancelled'\n    GROUP BY customer_id\n);"", ""status"": ""ok"", ""error"": """"}]"
+en26,en,hard,Which 3 products have the highest return rate (units returned divided by units sold)?,"WITH sold AS (
+    SELECT oi.product_id, SUM(oi.qty) AS units_sold
+    FROM order_items AS oi
+    JOIN orders AS o ON o.order_id = oi.order_id
+    WHERE o.status <> 'cancelled'
+    GROUP BY oi.product_id
+),
+returned AS (
+    SELECT r.product_id, SUM(r.qty) AS units_returned
+    FROM returns AS r
+    JOIN orders AS o ON o.order_id = r.order_id
+    WHERE o.status <> 'cancelled'
+    GROUP BY r.product_id
+)
+SELECT
+    p.id AS product_id,
+    p.name AS product_name,
+    COALESCE(r.units_returned, 0) AS units_returned,
+    s.units_sold,
+    1.0 * COALESCE(r.units_returned, 0) / s.units_sold AS return_rate
+FROM products AS p
+JOIN sold AS s ON s.product_id = p.id
+LEFT JOIN returned AS r ON r.product_id = p.id
+WHERE s.units_sold > 0
+ORDER BY return_rate DESC
+LIMIT 3;",answered,1,True,"The 3 products with the highest return rates are **Tinted Sun Cream SPF 30** (29 returned of 247 sold; **11.74%**), **AHA Peel Mask** (18 of 180; **10.00%**), and **Retinol 0.3% Night Serum** (10 of 163; **6.13%**).",,10.08,3,2612,725,0.000559,0,ok,0,,0,True,True,"[{""sql"": ""WITH sold AS (\n    SELECT oi.product_id, SUM(oi.qty) AS units_sold\n    FROM order_items AS oi\n    JOIN orders AS o ON o.order_id = oi.order_id\n    WHERE o.status <> 'cancelled'\n    GROUP BY oi.product_id\n),\nreturned AS (\n    SELECT r.product_id, SUM(r.qty) AS units_returned\n    FROM returns AS r\n    JOIN orders AS o ON o.order_id = r.order_id\n    WHERE o.status <> 'cancelled'\n    GROUP BY r.product_id\n)\nSELECT\n    p.id AS product_id,\n    p.name AS product_name,\n    COALESCE(r.units_returned, 0) AS units_returned,\n    s.units_sold,\n    1.0 * COALESCE(r.units_returned, 0) / s.units_sold AS return_rate\nFROM products AS p\nJOIN sold AS s ON s.product_id = p.id\nLEFT JOIN returned AS r ON r.product_id = p.id\nWHERE s.units_sold > 0\nORDER BY return_rate DESC\nLIMIT 3;"", ""status"": ""ok"", ""error"": """"}]"
+en27,en,hard,"Among products with at least 20 reviews, which one has the lowest average rating?","SELECT
+  p.name,
+  COUNT(r.review_id) AS review_count,
+  AVG(r.rating) AS average_rating
+FROM reviews AS r
+JOIN products AS p ON r.product_id = p.id
+GROUP BY p.id, p.name
+HAVING COUNT(r.review_id) >= 20
+ORDER BY average_rating ASC
+LIMIT 1;",answered,1,True,"Cica Recovery Balm has the lowest average rating among products with at least 20 reviews: 3.31 out of 5, based on 42 reviews.",,8.13,3,2337,322,0.000329,0,ok,0,,0,True,True,"[{""sql"": ""SELECT\n  p.name,\n  COUNT(r.review_id) AS review_count,\n  AVG(r.rating) AS average_rating\nFROM reviews AS r\nJOIN products AS p ON r.product_id = p.id\nGROUP BY p.id, p.name\nHAVING COUNT(r.review_id) >= 20\nORDER BY average_rating ASC\nLIMIT 1;"", ""status"": ""ok"", ""error"": """"}]"
+en28,en,hard,Which month had the biggest increase in revenue compared with the previous month?,"WITH RECURSIVE
+bounds AS (
+    SELECT
+        date(min(order_date), 'start of month', '-1 month') AS start_month,
+        date(max(order_date), 'start of month') AS end_month
+    FROM orders
+),
+months(month) AS (
+    SELECT start_month
+    FROM bounds
+    UNION ALL
+    SELECT date(months.month, '+1 month')
+    FROM months
+    CROSS JOIN bounds
+    WHERE months.month < bounds.end_month
+),
+monthly_revenue AS (
+    SELECT
+        strftime('%Y-%m', o.order_date) AS month,
+        SUM(oi.qty * oi.unit_price_aed) AS revenue
+    FROM orders AS o
+    JOIN order_items AS oi ON oi.order_id = o.order_id
+    WHERE o.status <> 'cancelled'
+    GROUP BY strftime('%Y-%m', o.order_date)
+),
+filled_months AS (
+    SELECT
+        strftime('%Y-%m', months.month) AS month,
+        COALESCE(monthly_revenue.revenue, 0) AS revenue
+    FROM months
+    LEFT JOIN monthly_revenue
+        ON monthly_revenue.month = strftime('%Y-%m', months.month)
+),
+comparisons AS (
+    SELECT
+        month,
+        revenue,
+        LAG(revenue) OVER (ORDER BY month) AS previous_month_revenue
+    FROM filled_months
+)
+SELECT
+    month,
+    revenue,
+    previous_month_revenue,
+    revenue - previous_month_revenue AS increase
+FROM comparisons
+WHERE previous_month_revenue IS NOT NULL
+ORDER BY increase DESC, month
+LIMIT 1;",answered,1,False,"April 2025 had the biggest increase: revenue rose by AED 43,671 compared with the previous month.",,18.47,3,2622,1583,0.000988,0,ok,0,,0,True,True,"[{""sql"": ""WITH RECURSIVE\nbounds AS (\n    SELECT\n        date(min(order_date), 'start of month', '-1 month') AS start_month,\n        date(max(order_date), 'start of month') AS end_month\n    FROM orders\n),\nmonths(month) AS (\n    SELECT start_month\n    FROM bounds\n    UNION ALL\n    SELECT date(months.month, '+1 month')\n    FROM months\n    CROSS JOIN bounds\n    WHERE months.month < bounds.end_month\n),\nmonthly_revenue AS (\n    SELECT\n        strftime('%Y-%m', o.order_date) AS month,\n        SUM(oi.qty * oi.unit_price_aed) AS revenue\n    FROM orders AS o\n    JOIN order_items AS oi ON oi.order_id = o.order_id\n    WHERE o.status <> 'cancelled'\n    GROUP BY strftime('%Y-%m', o.order_date)\n),\nfilled_months AS (\n    SELECT\n        strftime('%Y-%m', months.month) AS month,\n        COALESCE(monthly_revenue.revenue, 0) AS revenue\n    FROM months\n    LEFT JOIN monthly_revenue\n        ON monthly_revenue.month = strftime('%Y-%m', months.month)\n),\ncomparisons AS (\n    SELECT\n        month,\n        revenue,\n        LAG(revenue) OVER (ORDER BY month) AS previous_month_revenue\n    FROM filled_months\n)\nSELECT\n    month,\n    revenue,\n    previous_month_revenue,\n    revenue - previous_month_revenue AS increase\nFROM comparisons\nWHERE previous_month_revenue IS NOT NULL\nORDER BY increase DESC, month\nLIMIT 1;"", ""status"": ""ok"", ""error"": """"}]"
+en29,en,hard,What was the net revenue (revenue minus refunds on those same orders) for orders placed from July to September 2026?,"WITH revenue_by_order AS (
+    SELECT oi.order_id, SUM(oi.qty * oi.unit_price_aed) AS revenue
+    FROM order_items AS oi
+    GROUP BY oi.order_id
+),
+refunds_by_order AS (
+    SELECT r.order_id, SUM(r.refund_aed) AS refunds
+    FROM returns AS r
+    GROUP BY r.order_id
+)
+SELECT SUM(COALESCE(revenue_by_order.revenue, 0) - COALESCE(refunds_by_order.refunds, 0)) AS net_revenue_aed
+FROM orders AS o
+LEFT JOIN revenue_by_order ON revenue_by_order.order_id = o.order_id
+LEFT JOIN refunds_by_order ON refunds_by_order.order_id = o.order_id
+WHERE o.order_date BETWEEN '2026-07-01' AND '2026-09-30'
+  AND o.status <> 'cancelled';",answered,1,True,"Net revenue for non-cancelled orders placed from July through September 2026 was **148,900 AED**.",,8.7,3,2481,536,0.000451,0,ok,0,,0,True,True,"[{""sql"": ""WITH revenue_by_order AS (\n    SELECT oi.order_id, SUM(oi.qty * oi.unit_price_aed) AS revenue\n    FROM order_items AS oi\n    GROUP BY oi.order_id\n),\nrefunds_by_order AS (\n    SELECT r.order_id, SUM(r.refund_aed) AS refunds\n    FROM returns AS r\n    GROUP BY r.order_id\n)\nSELECT SUM(COALESCE(revenue_by_order.revenue, 0) - COALESCE(refunds_by_order.refunds, 0)) AS net_revenue_aed\nFROM orders AS o\nLEFT JOIN revenue_by_order ON revenue_by_order.order_id = o.order_id\nLEFT JOIN refunds_by_order ON refunds_by_order.order_id = o.order_id\nWHERE o.order_date BETWEEN '2026-07-01' AND '2026-09-30'\n  AND o.status <> 'cancelled';"", ""status"": ""ok"", ""error"": """"}]"
+en30,en,hard,How many customers placed their very first order (of any status) in 2026?,"SELECT COUNT(*)
+FROM (
+    SELECT customer_id
+    FROM orders
+    GROUP BY customer_id
+    HAVING MIN(order_date) BETWEEN '2026-01-01' AND '2026-12-31'
+);",answered,1,True,497 customers placed their very first order in 2026.,,7.37,3,2295,306,0.000317,0,ok,0,,0,True,True,"[{""sql"": ""SELECT COUNT(*)\nFROM (\n    SELECT customer_id\n    FROM orders\n    GROUP BY customer_id\n    HAVING MIN(order_date) BETWEEN '2026-01-01' AND '2026-12-31'\n);"", ""status"": ""ok"", ""error"": """"}]"
+ar01,ar,easy,كم عدد العملاء المسجلين؟,"SELECT COUNT(*) AS registered_customers
+FROM customers;",answered,1,True,"عدد العملاء المسجلين هو 2,000 عميل.",,7.27,3,2201,165,0.000236,0,ok,0,,0,True,True,"[{""sql"": ""SELECT COUNT(*) AS registered_customers\nFROM customers;"", ""status"": ""ok"", ""error"": """"}]"
+ar02,ar,easy,كم عدد الطلبات التي تم إلغاؤها؟,"SELECT COUNT(*) AS cancelled_orders
+FROM orders
+WHERE status = 'cancelled';",answered,1,True,تم إلغاء 197 طلبًا.,,6.31,3,2221,162,0.000237,0,ok,0,,0,True,True,"[{""sql"": ""SELECT COUNT(*) AS cancelled_orders\nFROM orders\nWHERE status = 'cancelled';"", ""status"": ""ok"", ""error"": """"}]"
+ar03,ar,easy,ما هو أغلى منتج، وما سعره؟,"SELECT name, price_aed
+FROM products
+WHERE price_aed = (SELECT MAX(price_aed) FROM products);",answered,1,True,أغلى منتج هو Peptide Firming Serum، وسعره 189 درهمًا (AED).,,8.02,3,2250,217,0.000267,0,ok,0,,0,True,True,"[{""sql"": ""SELECT name, price_aed\nFROM products\nWHERE price_aed = (SELECT MAX(price_aed) FROM products);"", ""status"": ""ok"", ""error"": """"}]"
+ar05,ar,easy,كم عدد الطلبات التي دُفعت نقداً عند الاستلام؟,"SELECT COUNT(*) AS cod_order_count
+FROM orders
+WHERE payment_method = 'cod';",answered,1,True,"بلغ عدد الطلبات المدفوعة نقداً عند الاستلام 1,434 طلباً.",,6.44,3,2244,193,0.000255,0,ok,0,,0,True,True,"[{""sql"": ""SELECT COUNT(*) AS cod_order_count\nFROM orders\nWHERE payment_method = 'cod';"", ""status"": ""ok"", ""error"": """"}]"
+ar07,ar,easy,كم عدد المنتجات في كل فئة؟,"SELECT category, COUNT(*) AS product_count
+FROM products
+GROUP BY category
+ORDER BY category;",answered,1,True,تحتوي كل فئة على 8 منتجات: المنظفات، والأقنعة، والمرطبات، والسيرومات، وواقيات الشمس.,,6.54,3,2248,204,0.00026,0,ok,0,,0,True,True,"[{""sql"": ""SELECT category, COUNT(*) AS product_count\nFROM products\nGROUP BY category\nORDER BY category;"", ""status"": ""ok"", ""error"": """"}]"
+ar11,ar,medium,ما إجمالي الإيرادات في عام 2025؟,"SELECT COALESCE(SUM(oi.qty * oi.unit_price_aed), 0) AS total_revenue_aed
+FROM orders AS o
+JOIN order_items AS oi ON oi.order_id = o.order_id
+WHERE o.order_date >= '2025-01-01'
+  AND o.order_date < '2026-01-01'
+  AND o.status <> 'cancelled';",answered,1,True,"إجمالي الإيرادات في عام 2025 هو **420,890.2 درهم إماراتي (AED)**.",,7.91,3,2330,339,0.000337,0,ok,0,,0,True,True,"[{""sql"": ""SELECT COALESCE(SUM(oi.qty * oi.unit_price_aed), 0) AS total_revenue_aed\nFROM orders AS o\nJOIN order_items AS oi ON oi.order_id = o.order_id\nWHERE o.order_date >= '2025-01-01'\n  AND o.order_date < '2026-01-01'\n  AND o.status <> 'cancelled';"", ""status"": ""ok"", ""error"": """"}]"
+ar12,ar,medium,اعرض الإيرادات لكل شهر من عام 2026 مرتبة حسب الشهر.,"SELECT
+  strftime('%Y-%m', o.order_date) AS month,
+  SUM(oi.qty * oi.unit_price_aed) AS revenue_aed
+FROM orders AS o
+JOIN order_items AS oi
+  ON oi.order_id = o.order_id
+WHERE o.status <> 'cancelled'
+  AND o.order_date >= '2026-01-01'
+  AND o.order_date <= '2026-12-31'
+GROUP BY strftime('%Y-%m', o.order_date)
+ORDER BY month ASC;",answered,1,True,"الإيرادات حسب الشهر في عام 2026:
+- يناير: 59,023 AED
+- فبراير: 51,331 AED
+- مارس: 68,197 AED
+- أبريل: 48,065 AED
+- مايو: 57,392 AED
+- يونيو: 60,049 AED
+- يوليو: 45,159 AED
+- أغسطس: 50,302 AED
+- سبتمبر: 58,804 AED",,10.29,3,2496,439,0.000404,0,ok,0,,0,True,True,"[{""sql"": ""SELECT\n  strftime('%Y-%m', o.order_date) AS month,\n  SUM(oi.qty * oi.unit_price_aed) AS revenue_aed\nFROM orders AS o\nJOIN order_items AS oi\n  ON oi.order_id = o.order_id\nWHERE o.status <> 'cancelled'\n  AND o.order_date >= '2026-01-01'\n  AND o.order_date <= '2026-12-31'\nGROUP BY strftime('%Y-%m', o.order_date)\nORDER BY month ASC;"", ""status"": ""ok"", ""error"": """"}]"
+ar13,ar,medium,ما الشهر الذي حقق أعلى إيرادات؟,"SELECT
+  strftime('%Y-%m', o.order_date) AS month,
+  SUM(oi.qty * oi.unit_price_aed) AS revenue
+FROM orders AS o
+JOIN order_items AS oi
+  ON oi.order_id = o.order_id
+WHERE o.status <> 'cancelled'
+GROUP BY strftime('%Y-%m', o.order_date)
+ORDER BY revenue DESC
+LIMIT 1;",answered,1,True,"حقق شهر ديسمبر 2025 أعلى إيرادات، بإجمالي 73,078 درهمًا إماراتيًا (AED).",,8.54,3,2352,359,0.00035,0,ok,0,,0,True,True,"[{""sql"": ""SELECT\n  strftime('%Y-%m', o.order_date) AS month,\n  SUM(oi.qty * oi.unit_price_aed) AS revenue\nFROM orders AS o\nJOIN order_items AS oi\n  ON oi.order_id = o.order_id\nWHERE o.status <> 'cancelled'\nGROUP BY strftime('%Y-%m', o.order_date)\nORDER BY revenue DESC\nLIMIT 1;"", ""status"": ""ok"", ""error"": """"}]"
+ar14,ar,medium,ما هي أفضل 5 منتجات من حيث عدد الوحدات المباعة؟,"SELECT
+  p.id,
+  p.name,
+  SUM(oi.qty) AS units_sold
+FROM products AS p
+JOIN order_items AS oi
+  ON oi.product_id = p.id
+JOIN orders AS o
+  ON o.order_id = oi.order_id
+WHERE o.status <> 'cancelled'
+GROUP BY p.id, p.name
+ORDER BY units_sold DESC, p.id
+LIMIT 5;",answered,1,True,"أفضل 5 منتجات حسب عدد الوحدات المباعة هي:
+
+1. **Daily Fluid SPF 50+** — 890 وحدة
+2. **Vitamin C Brightening Serum** — 634 وحدة
+3. **Snail Mucin Repair Essence** — 507 وحدات
+4. **Niacinamide 10% + Zinc Serum** — 501 وحدة
+5. **Gentle Foam Cleanser** — 495 وحدة",,7.78,3,2438,423,0.000391,0,ok,0,,0,True,True,"[{""sql"": ""SELECT\n  p.id,\n  p.name,\n  SUM(oi.qty) AS units_sold\nFROM products AS p\nJOIN order_items AS oi\n  ON oi.product_id = p.id\nJOIN orders AS o\n  ON o.order_id = oi.order_id\nWHERE o.status <> 'cancelled'\nGROUP BY p.id, p.name\nORDER BY units_sold DESC, p.id\nLIMIT 5;"", ""status"": ""ok"", ""error"": """"}]"
+ar15,ar,medium,ما متوسط التأخير في التوصيل بالأيام لكل مدينة توصيل؟,"SELECT
+  destination_city,
+  AVG(julianday(delivered_date) - julianday(promised_date)) AS average_delay_days
+FROM orders
+WHERE delivered_date IS NOT NULL
+GROUP BY destination_city
+ORDER BY destination_city;",answered,1,True,متوسط التأخير بالأيام لكل مدينة: أبوظبي ‎-0.17، عجمان ‎0.04، العين ‎0.52، الدوحة ‎-1.29، دبي ‎-0.17، جدة ‎-0.34، مدينة الكويت ‎-1.15، المنامة ‎-1.26، مسقط ‎0.48، رأس الخيمة ‎0.92، الرياض ‎-1.05، والشارقة ‎-0.09 يومًا. القيم السالبة تعني أن التوصيل كان قبل الموعد الموعود.,,10.05,3,2467,404,0.000383,0,ok,0,,0,True,True,"[{""sql"": ""SELECT\n  destination_city,\n  AVG(julianday(delivered_date) - julianday(promised_date)) AS average_delay_days\nFROM orders\nWHERE delivered_date IS NOT NULL\nGROUP BY destination_city\nORDER BY destination_city;"", ""status"": ""ok"", ""error"": """"}]"
+ar17,ar,medium,ما الإيرادات لكل قناة بيع؟,"SELECT
+  o.channel,
+  SUM(oi.qty * oi.unit_price_aed) AS revenue_aed
+FROM orders AS o
+JOIN order_items AS oi ON oi.order_id = o.order_id
+WHERE o.status <> 'cancelled'
+GROUP BY o.channel;",answered,1,True,"الإيرادات حسب قناة البيع: الموقع 411,986.8 AED، التطبيق 326,152.4 AED، وإنستغرام 181,073 AED.",,10.36,3,2299,276,0.000302,0,ok,0,,0,True,True,"[{""sql"": ""SELECT\n  o.channel,\n  SUM(oi.qty * oi.unit_price_aed) AS revenue_aed\nFROM orders AS o\nJOIN order_items AS oi ON oi.order_id = o.order_id\nWHERE o.status <> 'cancelled'\nGROUP BY o.channel;"", ""status"": ""ok"", ""error"": """"}]"
+ar18,ar,medium,ما متوسط قيمة الطلب؟ قرّب الناتج إلى منزلتين عشريتين.,"SELECT ROUND(SUM(total_aed) / COUNT(*), 2) AS average_order_value_aed
+FROM orders
+WHERE status <> 'cancelled';",answered,1,True,متوسط قيمة الطلب هو 191.38 درهم إماراتي (AED).,,7.31,3,2288,328,0.000327,0,ok,0,,0,True,True,"[{""sql"": ""SELECT ROUND(SUM(total_aed) / COUNT(*), 2) AS average_order_value_aed\nFROM orders\nWHERE status <> 'cancelled';"", ""status"": ""ok"", ""error"": """"}]"
+ar19,ar,medium,كم عدد الطلبات التي وصلت بعد موعد التسليم المحدد؟,"SELECT COUNT(*) AS late_orders
+FROM orders
+WHERE delivered_date IS NOT NULL
+  AND julianday(delivered_date) - julianday(promised_date) > 0;",answered,1,True,"وصل 1,388 طلبًا بعد موعد التسليم المحدد.",,6.78,3,2269,225,0.000274,0,ok,0,,0,True,True,"[{""sql"": ""SELECT COUNT(*) AS late_orders\nFROM orders\nWHERE delivered_date IS NOT NULL\n  AND julianday(delivered_date) - julianday(promised_date) > 0;"", ""status"": ""ok"", ""error"": """"}]"
+ar20,ar,medium,كم عدد بنود الإرجاع لكل سبب من أسباب الإرجاع؟,"SELECT reason, COUNT(*) AS return_line_count
+FROM returns
+GROUP BY reason;",answered,1,True,عدد بنود الإرجاع حسب السبب: **not_as_described: 82 بندًا، changed_mind: 72، wrong_item: 71، damaged: 65، skin_reaction: 30**.,,7.56,3,2301,314,0.000322,0,ok,0,,0,True,True,"[{""sql"": ""SELECT reason, COUNT(*) AS return_line_count\nFROM returns\nGROUP BY reason;"", ""status"": ""ok"", ""error"": """"}]"
+ar21,ar,medium,ما الإيرادات لكل فئة من فئات المنتجات؟,"SELECT
+  p.category,
+  SUM(oi.qty * oi.unit_price_aed) AS revenue_aed
+FROM products AS p
+JOIN order_items AS oi
+  ON oi.product_id = p.id
+JOIN orders AS o
+  ON o.order_id = oi.order_id
+WHERE o.status <> 'cancelled'
+GROUP BY p.category;",answered,1,True,"الإيرادات حسب فئة المنتج (AED): المنظفات 111,953.4، الأقنعة 107,012.2، المرطبات 179,200.6، الأمصال 300,920.8، وواقيات الشمس 220,125.2.",,8.04,3,2374,375,0.00036,0,ok,0,,0,True,True,"[{""sql"": ""SELECT\n  p.category,\n  SUM(oi.qty * oi.unit_price_aed) AS revenue_aed\nFROM products AS p\nJOIN order_items AS oi\n  ON oi.product_id = p.id\nJOIN orders AS o\n  ON o.order_id = oi.order_id\nWHERE o.status <> 'cancelled'\nGROUP BY p.category;"", ""status"": ""ok"", ""error"": """"}]"
+ar25,ar,hard,ما نسبة العملاء المتكررين (كنسبة مئوية بمنزلة عشرية واحدة)؟,"WITH customer_orders AS (
+    SELECT c.id, COUNT(o.order_id) AS order_count
+    FROM customers AS c
+    JOIN orders AS o
+      ON c.id = o.customer_id
+    WHERE o.status <> 'cancelled'
+    GROUP BY c.id
+)
+SELECT ROUND(
+    100.0 * SUM(CASE WHEN order_count >= 2 THEN 1 ELSE 0 END) / COUNT(*),
+    1
+) AS repeat_rate_percent
+FROM customer_orders;",answered,1,True,نسبة العملاء المتكررين هي **73.7%**.,,8.65,3,2386,602,0.000475,0,ok,0,,0,True,True,"[{""sql"": ""WITH customer_orders AS (\n    SELECT c.id, COUNT(o.order_id) AS order_count\n    FROM customers AS c\n    JOIN orders AS o\n      ON c.id = o.customer_id\n    WHERE o.status <> 'cancelled'\n    GROUP BY c.id\n)\nSELECT ROUND(\n    100.0 * SUM(CASE WHEN order_count >= 2 THEN 1 ELSE 0 END) / COUNT(*),\n    1\n) AS repeat_rate_percent\nFROM customer_orders;"", ""status"": ""ok"", ""error"": """"}]"
+ar26,ar,hard,ما هي المنتجات الثلاثة الأعلى في معدل الإرجاع (الوحدات المرتجعة مقسومة على الوحدات المباعة)؟,"WITH sales AS (
+    SELECT
+        oi.product_id,
+        SUM(oi.qty) AS units_sold
+    FROM order_items AS oi
+    JOIN orders AS o ON o.order_id = oi.order_id
+    WHERE o.status <> 'cancelled'
+    GROUP BY oi.product_id
+),
+returned AS (
+    SELECT
+        product_id,
+        SUM(qty) AS units_returned
+    FROM returns
+    GROUP BY product_id
+)
+SELECT
+    p.name,
+    COALESCE(r.units_returned, 0) AS units_returned,
+    s.units_sold,
+    1.0 * COALESCE(r.units_returned, 0) / s.units_sold AS return_rate
+FROM products AS p
+JOIN sales AS s ON s.product_id = p.id
+LEFT JOIN returned AS r ON r.product_id = p.id
+ORDER BY return_rate DESC
+LIMIT 3;",answered,1,True,المنتجات الثلاثة الأعلى في معدل الإرجاع هي: **Tinted Sun Cream SPF 30** بمعدل **11.74%** (29 وحدة مرتجعة من 247 مباعة)، و**AHA Peel Mask** بمعدل **10%** (18 من 180)، و**Retinol 0.3% Night Serum** بمعدل **6.13%** (10 من 163).,,10.62,3,2651,742,0.000574,0,ok,0,,0,True,True,"[{""sql"": ""WITH sales AS (\n    SELECT\n        oi.product_id,\n        SUM(oi.qty) AS units_sold\n    FROM order_items AS oi\n    JOIN orders AS o ON o.order_id = oi.order_id\n    WHERE o.status <> 'cancelled'\n    GROUP BY oi.product_id\n),\nreturned AS (\n    SELECT\n        product_id,\n        SUM(qty) AS units_returned\n    FROM returns\n    GROUP BY product_id\n)\nSELECT\n    p.name,\n    COALESCE(r.units_returned, 0) AS units_returned,\n    s.units_sold,\n    1.0 * COALESCE(r.units_returned, 0) / s.units_sold AS return_rate\nFROM products AS p\nJOIN sales AS s ON s.product_id = p.id\nLEFT JOIN returned AS r ON r.product_id = p.id\nORDER BY return_rate DESC\nLIMIT 3;"", ""status"": ""ok"", ""error"": """"}]"
+ar27,ar,hard,من بين المنتجات التي لديها 20 تقييماً على الأقل، أيها لديه أدنى متوسط تقييم؟,"SELECT
+    p.name,
+    COUNT(r.review_id) AS review_count,
+    AVG(r.rating) AS average_rating
+FROM products AS p
+JOIN reviews AS r
+    ON p.id = r.product_id
+GROUP BY p.id, p.name
+HAVING COUNT(r.review_id) >= 20
+ORDER BY average_rating ASC
+LIMIT 1;",answered,1,True,المنتج ذو أدنى متوسط تقييم هو **Cica Recovery Balm**، بمتوسط **3.31 من 5** عبر **42 تقييماً**.,,8.68,3,2378,430,0.000388,0,ok,0,,0,True,True,"[{""sql"": ""SELECT\n    p.name,\n    COUNT(r.review_id) AS review_count,\n    AVG(r.rating) AS average_rating\nFROM products AS p\nJOIN reviews AS r\n    ON p.id = r.product_id\nGROUP BY p.id, p.name\nHAVING COUNT(r.review_id) >= 20\nORDER BY average_rating ASC\nLIMIT 1;"", ""status"": ""ok"", ""error"": """"}]"
+ar28,ar,hard,ما الشهر الذي شهد أكبر زيادة في الإيرادات مقارنة بالشهر السابق؟,"WITH monthly AS (
+    SELECT
+        strftime('%Y-%m', o.order_date) AS month,
+        SUM(oi.qty * oi.unit_price_aed) AS revenue
+    FROM orders AS o
+    JOIN order_items AS oi
+        ON oi.order_id = o.order_id
+    WHERE o.status <> 'cancelled'
+    GROUP BY strftime('%Y-%m', o.order_date)
+),
+compared AS (
+    SELECT
+        month,
+        revenue,
+        LAG(revenue) OVER (ORDER BY month) AS previous_month_revenue
+    FROM monthly
+)
+SELECT
+    month,
+    revenue,
+    previous_month_revenue,
+    revenue - previous_month_revenue AS increase
+FROM compared
+WHERE previous_month_revenue IS NOT NULL
+ORDER BY increase DESC
+LIMIT 1;",answered,1,True,"شهد نوفمبر 2025 أكبر زيادة في الإيرادات مقارنة بالشهر السابق، بزيادة قدرها 20,345.2 درهمًا إماراتيًا، من 45,856 إلى 66,201.2 درهمًا إماراتيًا.",,24.81,3,2474,982,0.000673,0,ok,0,,0,True,True,"[{""sql"": ""WITH monthly AS (\n    SELECT\n        strftime('%Y-%m', o.order_date) AS month,\n        SUM(oi.qty * oi.unit_price_aed) AS revenue\n    FROM orders AS o\n    JOIN order_items AS oi\n        ON oi.order_id = o.order_id\n    WHERE o.status <> 'cancelled'\n    GROUP BY strftime('%Y-%m', o.order_date)\n),\ncompared AS (\n    SELECT\n        month,\n        revenue,\n        LAG(revenue) OVER (ORDER BY month) AS previous_month_revenue\n    FROM monthly\n)\nSELECT\n    month,\n    revenue,\n    previous_month_revenue,\n    revenue - previous_month_revenue AS increase\nFROM compared\nWHERE previous_month_revenue IS NOT NULL\nORDER BY increase DESC\nLIMIT 1;"", ""status"": ""ok"", ""error"": """"}]"
+ar30,ar,hard,كم عدد العملاء الذين قدموا أول طلب لهم على الإطلاق (بأي حالة) في عام 2026؟,"SELECT COUNT(*) AS customer_count
+FROM (
+  SELECT customer_id
+  FROM orders
+  GROUP BY customer_id
+  HAVING MIN(order_date) BETWEEN '2026-01-01' AND '2026-12-31'
+);",answered,1,True,قدّم 497 عميلاً أول طلب لهم على الإطلاق في عام 2026، بأي حالة كانت للطلب.,,12.22,3,2327,355,0.000345,0,ok,0,,0,True,True,"[{""sql"": ""SELECT COUNT(*) AS customer_count\nFROM (\n  SELECT customer_id\n  FROM orders\n  GROUP BY customer_id\n  HAVING MIN(order_date) BETWEEN '2026-01-01' AND '2026-12-31'\n);"", ""status"": ""ok"", ""error"": """"}]"

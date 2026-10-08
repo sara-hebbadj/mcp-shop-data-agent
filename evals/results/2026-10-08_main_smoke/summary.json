@@ -1,0 +1,103 @@
+{
+  "label": "real run",
+  "model": "anthropic/claude-sonnet-5.5",
+  "model_role": "main",
+  "run_date": "2026-10-08",
+  "command": "python -m evals.run --model main --limit 5 --skip-safety --max-cost 0.2 --tag smoke",
+  "execution_accuracy": {
+    "questions": 5,
+    "correct": 4,
+    "accuracy": 0.8
+  },
+  "by_language": {
+    "en": {
+      "questions": 5,
+      "correct": 4,
+      "accuracy": 0.8
+    }
+  },
+  "by_difficulty": {
+    "easy": {
+      "questions": 5,
+      "correct": 4,
+      "accuracy": 0.8
+    }
+  },
+  "total_cost_usd": 0.05,
+  "mean_cost_usd_per_question": 0.009997,
+  "median_latency_s": 5.85,
+  "max_latency_s": 9.04,
+  "sql": {
+    "first_sql_valid": {
+      "count": 5,
+      "of": 5,
+      "rate": 1.0
+    },
+    "final_sql_valid": {
+      "count": 5,
+      "of": 5,
+      "rate": 1.0
+    },
+    "questions_with_a_retry": {
+      "count": 0,
+      "of": 5,
+      "rate": 0.0
+    },
+    "retries_total": 0,
+    "retry_fixed_it": 0,
+    "questions_with_a_guard_block": {
+      "count": 0,
+      "of": 5,
+      "rate": 0.0
+    },
+    "guard_blocks_total": 0,
+    "guard_blocks_by_rule": {},
+    "sqlite_errors_total": 0,
+    "outcomes": {
+      "answered": 5
+    }
+  },
+  "cost_latency_by_language": {
+    "en": {
+      "cost_usd": 0.049986,
+      "mean_cost_usd": 0.009997,
+      "mean_latency_s": 6.41,
+      "median_latency_s": 5.85,
+      "max_latency_s": 9.04,
+      "mean_llm_calls": 3.0
+    }
+  },
+  "sql_by_language": {
+    "en": {
+      "first_sql_valid": {
+        "count": 5,
+        "of": 5,
+        "rate": 1.0
+      },
+      "final_sql_valid": {
+        "count": 5,
+        "of": 5,
+        "rate": 1.0
+      },
+      "questions_with_a_retry": {
+        "count": 0,
+        "of": 5,
+        "rate": 0.0
+      },
+      "retries_total": 0,
+      "retry_fixed_it": 0,
+      "questions_with_a_guard_block": {
+        "count": 0,
+        "of": 5,
+        "rate": 0.0
+      },
+      "guard_blocks_total": 0,
+      "guard_blocks_by_rule": {},
+      "sqlite_errors_total": 0,
+      "outcomes": {
+        "answered": 5
+      }
+    }
+  },
+  "database_unchanged": true
+}

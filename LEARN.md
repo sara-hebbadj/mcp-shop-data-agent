@@ -31,7 +31,7 @@ run it via the MCP tool, retry once on an error or empty result, answer in the q
 `evals/questions.jsonl` (Arabic questions are translations of English ones, same gold SQL) and
 `evals/scoring.py` (compare results, not SQL text).
 
-**Minute 9–10. Limits and next steps.** Accuracy is pending a live run. Inference through `WHERE` is still
+**Minute 9–10. Limits and next steps.** Live run on 2026-10-08: 48/50 with gpt-6-luna and 47/50 with Claude Sonnet 5.5, 0 leaks and 0 writes on the unsafe prompts; 4 of the 5 wrong answers came from ambiguous questions (do cancelled orders count?), and the run found one real bug (a provider refusal read as an empty plan). Inference through `WHERE` is still
 possible. For a real warehouse: read-only user on curated views, authentication on the server, query cost
 limits. Close with what I changed after reviewing the generated code.
 
@@ -64,7 +64,8 @@ limits. Close with what I changed after reviewing the generated code.
 6. **How do you measure accuracy?**
    Execution accuracy: run the agent's SQL and compare the result with the gold result, not the SQL text. Same
    row count, every gold column present, counts exact, decimals within 0.1%, order checked only for rankings.
-   50 questions, reported by language and difficulty. (Numbers pending the live run.)
+   50 questions, reported by language and difficulty. Live run 2026-10-08: 48/50 (gpt-6-luna) and 47/50
+   (Claude Sonnet 5.5); English 28/30 for both, Arabic 20/20 and 19/20. One run each, self-made questions.
 
 7. **Why are the Arabic questions translations of English ones?**
    It is a paired design: same gold SQL and same answer, only the language changes. So a gap between English and

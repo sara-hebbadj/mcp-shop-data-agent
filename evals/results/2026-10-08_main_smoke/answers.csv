@@ -1,0 +1,17 @@
+id,lang,difficulty,question,predicted_sql,outcome,attempts,correct,answer,error,latency_s,llm_calls,prompt_tokens,completion_tokens,cost_usd,retries,attempt_statuses,guard_blocks,guard_rules,sqlite_errors,first_sql_valid,final_sql_valid,attempts_detail
+en01,en,easy,How many customers are registered?,"SELECT COUNT(*) AS registered_customers
+FROM customers;",answered,1,True,"There are 2,000 customers registered.",,5.85,3,3678,159,0.008946,0,ok,0,,0,True,True,"[{""sql"": ""SELECT COUNT(*) AS registered_customers\nFROM customers;"", ""status"": ""ok"", ""error"": """"}]"
+en02,en,easy,How many orders were cancelled?,"SELECT COUNT(*) AS cancelled_orders
+FROM orders
+WHERE status = 'cancelled';",answered,1,True,A total of 197 orders were cancelled.,,5.36,3,3716,192,0.009352,0,ok,0,,0,True,True,"[{""sql"": ""SELECT COUNT(*) AS cancelled_orders\nFROM orders\nWHERE status = 'cancelled';"", ""status"": ""ok"", ""error"": """"}]"
+en03,en,easy,"What is the most expensive product, and what is its price?","SELECT name, price_aed, id
+FROM products
+WHERE price_aed = (SELECT MAX(price_aed) FROM products)
+ORDER BY name;",answered,1,True,"The most expensive product is the Peptide Firming Serum (ID P015), priced at 189.0 AED.",,6.2,3,3797,257,0.010164,0,ok,0,,0,True,True,"[{""sql"": ""SELECT name, price_aed, id\nFROM products\nWHERE price_aed = (SELECT MAX(price_aed) FROM products)\nORDER BY name;"", ""status"": ""ok"", ""error"": """"}]"
+en04,en,easy,How many products are out of stock right now?,"SELECT COUNT(*) AS out_of_stock_products
+FROM products
+WHERE stock = 0;",answered,1,True,"Right now, 1 product is out of stock (stock = 0).",,5.58,3,3707,185,0.009264,0,ok,0,,0,True,True,"[{""sql"": ""SELECT COUNT(*) AS out_of_stock_products\nFROM products\nWHERE stock = 0;"", ""status"": ""ok"", ""error"": """"}]"
+en05,en,easy,How many orders were paid with cash on delivery?,"SELECT COUNT(DISTINCT order_id) AS cod_orders
+FROM orders
+WHERE payment_method = 'cod'
+  AND status <> 'cancelled';",answered,1,False,"1,377 orders were paid with cash on delivery, excluding cancelled orders.",,9.04,3,3785,469,0.01226,0,ok,0,,0,True,True,"[{""sql"": ""SELECT COUNT(DISTINCT order_id) AS cod_orders\nFROM orders\nWHERE payment_method = 'cod'\n  AND status <> 'cancelled';"", ""status"": ""ok"", ""error"": """"}]"

@@ -1,0 +1,24 @@
+id,lang,difficulty,question,predicted_sql,outcome,attempts,correct,answer,error,latency_s,llm_calls,prompt_tokens,completion_tokens,cost_usd,retries,attempt_statuses,guard_blocks,sqlite_errors,first_sql_valid,final_sql_valid,attempts_detail
+en01,en,easy,How many customers are registered?,"SELECT COUNT(*) AS registered_customers
+FROM customers;",answered,1,True,"2,000 customers are registered.",,6.62,3,2186,133,0.000337,0,ok,0,0,True,True,"[{""sql"": ""SELECT COUNT(*) AS registered_customers\nFROM customers;"", ""status"": ""ok"", ""error"": """"}]"
+en02,en,easy,How many orders were cancelled?,"SELECT COUNT(*) AS cancelled_orders
+FROM orders
+WHERE status = 'cancelled';",answered,1,True,197 orders were cancelled.,,6.05,3,2195,123,0.000214,0,ok,0,0,True,True,"[{""sql"": ""SELECT COUNT(*) AS cancelled_orders\nFROM orders\nWHERE status = 'cancelled';"", ""status"": ""ok"", ""error"": """"}]"
+en03,en,easy,"What is the most expensive product, and what is its price?","SELECT name, price_aed
+FROM products
+ORDER BY price_aed DESC
+LIMIT 1;",answered,1,True,"The most expensive product is Peptide Firming Serum, priced at AED 189.0.",,7.1,3,2237,197,0.000256,0,ok,0,0,True,True,"[{""sql"": ""SELECT name, price_aed\nFROM products\nORDER BY price_aed DESC\nLIMIT 1;"", ""status"": ""ok"", ""error"": """"}]"
+en04,en,easy,How many products are out of stock right now?,"SELECT COUNT(*) AS out_of_stock_products
+FROM products
+WHERE stock = 0;",answered,1,True,1 product is out of stock right now.,,6.44,3,2211,134,0.000221,0,ok,0,0,True,True,"[{""sql"": ""SELECT COUNT(*) AS out_of_stock_products\nFROM products\nWHERE stock = 0;"", ""status"": ""ok"", ""error"": """"}]"
+en05,en,easy,How many orders were paid with cash on delivery?,"SELECT COUNT(*) AS cod_order_count
+FROM orders
+WHERE payment_method = 'cod';",answered,1,True,"1,434 orders were paid with cash on delivery.",,6.71,3,2218,166,0.000238,0,ok,0,0,True,True,"[{""sql"": ""SELECT COUNT(*) AS cod_order_count\nFROM orders\nWHERE payment_method = 'cod';"", ""status"": ""ok"", ""error"": """"}]"
+en06,en,easy,What is the average review rating across all reviews? Round to 2 decimals.,"SELECT ROUND(AVG(rating), 2) AS average_rating
+FROM reviews;",answered,1,True,The average review rating is 3.80.,,12.73,3,2229,157,0.000235,0,ok,0,0,True,True,"[{""sql"": ""SELECT ROUND(AVG(rating), 2) AS average_rating\nFROM reviews;"", ""status"": ""ok"", ""error"": """"}]"
+en07,en,easy,How many products are there in each category?,"SELECT category, COUNT(*) AS product_count
+FROM products
+GROUP BY category;",answered,1,True,"There are 8 products in each category: cleanser, mask, moisturiser, serum, and sunscreen.",,6.46,3,2244,148,0.000232,0,ok,0,0,True,True,"[{""sql"": ""SELECT category, COUNT(*) AS product_count\nFROM products\nGROUP BY category;"", ""status"": ""ok"", ""error"": """"}]"
+en08,en,easy,How many customers prefer Arabic as their language?,"SELECT COUNT(*)
+FROM customers
+WHERE language = 'ar';",answered,1,True,644 customers prefer Arabic.,,5.64,3,2199,145,0.000225,0,ok,0,0,True,True,"[{""sql"": ""SELECT COUNT(*)\nFROM customers\nWHERE language = 'ar';"", ""status"": ""ok"", ""error"": """"}]"
